@@ -21,14 +21,11 @@ module.exports = {
       city: {
         type: Sequelize.STRING,
       },
-      imageUrl: {
+      image_url: {
         type: Sequelize.TEXT,
       },
       role: {
         type: Sequelize.ENUM(["Admin", "Manager", "Staff"]),
-      },
-      shopId: {
-        type: DataTypes.INTEGER,
       },
       createdAt: {
         allowNull: false,
