@@ -9,19 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasOne(models.Auth, {
+      User.hasMany(models.Rental, {
         foreignKey: {
           name: "userId",
         },
       });
 
-      User.belongsTo(models.Shop, {
+      User.hasMany(models.Car, {
         foreignKey: {
-          name: "shopId",
+          name: "userId",
         },
       });
 
-      User.hasMany(models.Product, {
+      User.hasOne(models.Auths, {
         foreignKey: {
           name: "userId",
         },
@@ -30,19 +30,23 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      name: DataTypes.STRING,
-      age: DataTypes.INTEGER,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      age: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      address: DataTypes.STRING,
+      image: {
+        type: DataTypes.TEXT,
+      },
       role: {
-        type: DataTypes.ENUM(["Admin", "Manager", "Staff"]),
+        type: DataTypes.STRING,
+        enum: ["Admin", "Manager", "Staff"],
         defaultValue: "Staff",
       },
-      city: DataTypes.STRING,
-      imageUrl: {
-        type: DataTypes.TEXT,
-        defaultValue:
-          "https://tse2.mm.bing.net/th?id=OIP.U2iQ7wNK6ZzTW_traW_-PQHaHa&pid=Api&P=0&h=180",
-      },
-      shopId: DataTypes.INTEGER,
     },
     {
       sequelize,
