@@ -1,14 +1,14 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Auth, User } = require("../models");
+const { Auths, User } = require("../models");
 const ApiError = require("../utils/apiError");
 
 const register = async (req, res, next) => {
   try {
-    const { name, email, password, confirmPassword, age, address } = req.body;
+    const { name, email, password, age, address, role, image } = req.body;
 
     // validasi untuk check apakah email nya udah ada
-    const user = await Auth.findOne({
+    const user = await Auths.findOne({
       where: {
         email,
       },
@@ -25,30 +25,30 @@ const register = async (req, res, next) => {
     }
 
     // minimum password length
-    if (password !== confirmPassword) {
-      next(new ApiError("password does not match", 400));
-    }
+    // if (password !== confirmPassword) {
+    //   next(new ApiError("password does not match", 400));
+    // }
 
     // hashing password
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
-    const hashedConfirmPassword = bcrypt.hashSync(confirmPassword, saltRounds);
 
-    let shopId = req.user.shopId;
-    if (req.user.role === "Admin" && req.body.shopId) {
-      shopId = req.body.shopId;
+    let rentalId = req.user.rentalId;
+    if (req.user.role === "Admin" && req.body.rentalId) {
+      rentalId = req.body.rentalId;
     }
 
     const newUser = await User.create({
       name,
       address,
       age,
-      shopId,
+      role,
+      image,
+      rentalId,
     });
-    const test = await Auth.create({
+    const test = await Auths.create({
       email,
       password: hashedPassword,
-      confirmPassword: hashedConfirmPassword,
       userId: newUser.id,
     });
 
@@ -60,7 +60,6 @@ const register = async (req, res, next) => {
         ...newUser,
         email,
         password: hashedPassword,
-        confirmPassword: hashedConfirmPassword,
       },
     });
   } catch (err) {
@@ -72,7 +71,7 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await Auth.findOne({
+    const user = await Auths.findOne({
       where: {
         email,
       },
@@ -87,7 +86,7 @@ const login = async (req, res, next) => {
           username: user.User.name,
           role: user.User.role,
           email: user.email,
-          shopId: user.shopId,
+          rentalId: user.rentalId,
         },
         process.env.JWT_SECRET,
         {

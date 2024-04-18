@@ -1,11 +1,11 @@
 const multer = require("multer");
-const { Product, Shop, User } = require("../models");
+const { Car, Rental, User } = require("../models");
 const imagekit = require("../lib/imagekit");
 const ApiError = require("../utils/apiError");
 const { Op } = require("sequelize");
 
 const createProduct = async (req, res, next) => {
-  const { name, price, stock } = req.body;
+  const { name, rentPrice } = req.body;
   const files = req.files;
   let images = [];
 
@@ -27,28 +27,30 @@ const createProduct = async (req, res, next) => {
       );
     }
 
-    let shopId;
+    let rentalId;
     if (req.user.role === "Admin") {
-      if (!req.body.shopId) {
+      if (!req.body.rentalId) {
         return next(
           new ApiError(
-            "The 'shopId' field is required to create a product. Please provide the 'shopId' in the request body.",
+            "The 'rentalId' field is required to create a product. Please provide the 'rentalId' in the request body.",
             400
           )
         );
       }
-      shopId = req.body.shopId;
+      rentalId = req.body.rentalId;
     } else {
-      shopId = req.user.shopId;
+      rentalId = req.user.rentalId;
     }
+    console.log(rentalId);
 
-    const newProduct = await Product.create({
+    const imagesJson = JSON.stringify(images);
+
+    const newProduct = await Car.create({
       name,
-      price,
-      stock,
-      imageUrl: images,
+      rentPrice,
+      image: imagesJson,
       userId: req.user.id,
-      shopId,
+      rentalId,
     });
 
     res.status(200).json({
@@ -85,16 +87,16 @@ const findProducts = async (req, res, next) => {
     } else {
       whereCondition = {
         ...condition,
-        shopId: req.user.shopId,
+        rentalId: req.user.rentalId,
       };
     }
 
-    const totalCount = await Product.count({ where: whereCondition });
+    const totalCount = await Car.count({ where: whereCondition });
 
-    const products = await Product.findAll({
+    const products = await Car.findAll({
       include: [
         {
-          model: Shop,
+          model: Rental,
           where: includeShopCondition,
           attributes: ["id", "name"],
         },
@@ -105,7 +107,7 @@ const findProducts = async (req, res, next) => {
       ],
       where: whereCondition,
       order: [["id", "ASC"]],
-      attributes: ["name", "price", "stock", "createdAt", "updatedAt"],
+      attributes: ["name", "rentPrice", "userId", "createdAt", "updatedAt"],
       limit: pageSize,
       offset: offset,
     });
@@ -131,7 +133,7 @@ const findProducts = async (req, res, next) => {
 
 const findProductById = async (req, res, next) => {
   try {
-    const product = await Product.findOne({
+    const product = await Car.findOne({
       where: {
         id: req.params.id,
       },
@@ -143,7 +145,7 @@ const findProductById = async (req, res, next) => {
       );
     }
 
-    if (product.shopId !== req.user.shopId) {
+    if (product.rentalId !== req.user.rentalId) {
       return next(new ApiError("Your shop is not owner of this product", 401));
     }
 
@@ -161,7 +163,7 @@ const findProductById = async (req, res, next) => {
 const UpdateProduct = async (req, res, next) => {
   const { name, price, stock } = req.body;
   try {
-    const product = await Product.update(
+    const product = await Car.update(
       {
         name,
         price,
@@ -186,7 +188,7 @@ const UpdateProduct = async (req, res, next) => {
 const deleteProduct = async (req, res, next) => {
   const { name, price, stock } = req.body;
   try {
-    const product = await Product.findOne({
+    const product = await Car.findOne({
       where: {
         id: req.params.id,
       },
@@ -196,7 +198,7 @@ const deleteProduct = async (req, res, next) => {
       next(new ApiError("Product id tersebut gak ada", 404));
     }
 
-    await Product.destroy({
+    await Car.destroy({
       where: {
         id: req.params.id,
       },

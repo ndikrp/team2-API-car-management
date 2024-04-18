@@ -1,41 +1,57 @@
-'use strict';
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Users', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
+"use strict";
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  class User extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      User.hasMany(models.Rental, {
+        foreignKey: {
+          name: "userId",
+        },
+      });
+
+      User.hasMany(models.Car, {
+        foreignKey: {
+          name: "userId",
+        },
+      });
+
+      User.hasOne(models.Auths, {
+        foreignKey: {
+          name: "userId",
+        },
+      });
+    }
+  }
+  User.init(
+    {
       name: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       age: {
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
-      address: {
-        type: Sequelize.STRING
+      address: DataTypes.STRING,
+      image: {
+        type: DataTypes.TEXT,
       },
       role: {
-        type: Sequelize.ENUM('Admin', 'Manager', 'Staff'),
-        defaultValue: 'Staff'
+        type: DataTypes.STRING,
+        enum: ["Admin", "Manager", "Staff"],
+        defaultValue: "Staff",
       },
-      image_url: {
-        type: Sequelize.TEXT,
-        defaultValue: 'https://tse2.mm.bing.net/th?id=OIP.U2iQ7wNK6ZzTW_traW_-PQHaHa&pid=Api&P=0&h=180'
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Users');
-  }
+    },
+    {
+      sequelize,
+      modelName: "User",
+    }
+  );
+  return User;
 };
