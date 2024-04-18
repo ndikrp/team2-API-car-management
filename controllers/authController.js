@@ -1,14 +1,18 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Auth, User } = require("../models");
+const { Auths, User } = require("../models");
 const ApiError = require("../utils/apiError");
 
 const register = async (req, res, next) => {
   try {
+    if (req.user.role === "Staff") {
+      return next(
+        new ApiError("Staff is not allowed to register new users", 403)
+      );
+    }
     const { name, email, password, confirmPassword, age, address } = req.body;
 
-    // validasi untuk check apakah email nya udah ada
-    const user = await Auth.findOne({
+    const user = await Auths.findOne({
       where: {
         email,
       },
@@ -34,18 +38,31 @@ const register = async (req, res, next) => {
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
     const hashedConfirmPassword = bcrypt.hashSync(confirmPassword, saltRounds);
 
-    let shopId = req.user.shopId;
-    if (req.user.role === "Admin" && req.body.shopId) {
-      shopId = req.body.shopId;
+    let rentalId;
+    let role;
+    if (req.user.role === "Admin") {
+      // if user = "Admin"
+      role = req.body.role;
+      if (!req.body.rentalId) {
+        return next(
+          new ApiError("Admin must input rentalId in the request body", 400)
+        );
+      }
+      rentalId = req.body.rentalId;
+    } else if (req.user.role === "Manager") {
+      // if use not "Admin"
+      role = "Staff";
+      rentalId = req.user.rentalId;
     }
 
     const newUser = await User.create({
       name,
       address,
       age,
-      shopId,
+      rentalId,
+      role,
     });
-    const test = await Auth.create({
+    const test = await Auths.create({
       email,
       password: hashedPassword,
       confirmPassword: hashedConfirmPassword,
@@ -72,7 +89,7 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await Auth.findOne({
+    const user = await Auths.findOne({
       where: {
         email,
       },
@@ -87,7 +104,7 @@ const login = async (req, res, next) => {
           username: user.User.name,
           role: user.User.role,
           email: user.email,
-          shopId: user.shopId,
+          rentalId: user.rentalId,
         },
         process.env.JWT_SECRET,
         {
@@ -101,7 +118,7 @@ const login = async (req, res, next) => {
         data: token,
       });
     } else {
-      next(new ApiError("wrong password atau user gak ada", 400));
+      next(new ApiError("wrong password or user not found", 400));
     }
   } catch (err) {
     next(new ApiError(err.message, 500));
