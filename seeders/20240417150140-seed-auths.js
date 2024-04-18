@@ -48,7 +48,7 @@ module.exports = {
       {
         email: "gita@mail.com",
         password:
-          "$2a$12$52jmU1ASdJaCPNaZyCPIKOaiQV/3Ms7A41qv7lgZ2PMc2gCuOdWbe",
+          "$2a$12$mJHFou39dDsvFKa2M2jFYuSMeN0jTx/vNPA7FbctY93T2A6H3y6i2",
         userId: 5,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),

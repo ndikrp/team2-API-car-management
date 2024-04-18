@@ -14,31 +14,13 @@ module.exports = {
      */
     await queryInterface.bulkInsert("Rentals", [
       {
-        name: "Hafiedz's Shop",
+        name: "Rental Rafli",
         city: "Makassar",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
       {
-        name: "Rafli's Shop",
-        city: "Makassar",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        name: "Andhika's Shop",
-        city: "Makassar",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        name: "Rendi's Shop",
-        city: "Makassar",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        name: "Gita's Shop",
+        name: "Rental Rendi",
         city: "Makassar",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),

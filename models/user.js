@@ -49,7 +49,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       rentalId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
     },
     {
