@@ -88,7 +88,11 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
+    // validated email
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      return next(new ApiError("Invalid email format", 400));
+    }
     const user = await Auths.findOne({
       where: {
         email,
