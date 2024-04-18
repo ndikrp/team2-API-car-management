@@ -17,16 +17,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
-      },
-      carId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
