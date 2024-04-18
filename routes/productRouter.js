@@ -1,5 +1,4 @@
 const router = require("express").Router();
-
 const Product = require("../controllers/productController");
 
 const upload = require("../middlewares/uploader");
