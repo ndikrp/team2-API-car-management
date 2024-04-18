@@ -9,15 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Rental.belongsTo(models.Car, {
+      Rental.hasMany(models.Car, {
         foreignKey: {
-          name: "carId",
+          name: "rentalId",
         },
       });
 
-      Rental.belongsTo(models.User, {
+      Rental.hasMany(models.User, {
         foreignKey: {
-          name: "userId",
+          name: "rentalId",
         },
       });
     }
@@ -28,12 +28,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      carId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
+      city: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },

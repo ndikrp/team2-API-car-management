@@ -21,6 +21,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      rentalId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       image: {
         type: Sequelize.TEXT,
         allowNull: false,

@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
           name: "userId",
         },
       });
-      Car.hasMany(models.Rental, {
+      Car.belongsTo(models.Rental, {
         foreignKey: {
-          name: "carId",
+          name: "rentalId",
         },
       });
       Car.hasOne(models.Details, {
@@ -37,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      rentalId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

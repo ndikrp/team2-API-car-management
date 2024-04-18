@@ -21,6 +21,7 @@ module.exports = {
         updatedAt: new Date().toISOString(),
         role: "Admin",
         image: "gambar1.png",
+        rentalId: 1,
       },
       {
         name: "Rafli",
@@ -30,6 +31,7 @@ module.exports = {
         updatedAt: new Date().toISOString(),
         role: "Manager",
         image: "gambar1.png",
+        rentalId: 2,
       },
       {
         name: "Andhika",
@@ -39,6 +41,7 @@ module.exports = {
         updatedAt: new Date().toISOString(),
         role: "Admin",
         image: "gambar1.png",
+        rentalId: 3,
       },
       {
         name: "Rendi",
@@ -48,6 +51,7 @@ module.exports = {
         updatedAt: new Date().toISOString(),
         role: "Manager",
         image: "gambar1.png",
+        rentalId: 4,
       },
       {
         name: "Gita",
@@ -57,6 +61,7 @@ module.exports = {
         updatedAt: new Date().toISOString(),
         role: "Admin",
         image: "gambar1.png",
+        rentalId: 5,
       },
     ]);
   },
