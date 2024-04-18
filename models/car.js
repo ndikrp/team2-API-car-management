@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class Car extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,52 +9,50 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.belongsTo(models.Rental, {
+      Car.belongsTo(models.User, {
+        foreignKey: {
+          name: "userId",
+        },
+      });
+      Car.belongsTo(models.Rental, {
         foreignKey: {
           name: "rentalId",
         },
       });
-
-      User.hasMany(models.Car, {
+      Car.hasOne(models.Details, {
         foreignKey: {
-          name: "userId",
-        },
-      });
-
-      User.hasOne(models.Auths, {
-        foreignKey: {
-          name: "userId",
+          name: "carId",
         },
       });
     }
   }
-  User.init(
+  Car.init(
     {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      age: {
+      rentPrice: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      address: DataTypes.STRING,
-      image: {
-        type: DataTypes.TEXT,
-      },
-      role: {
-        type: DataTypes.STRING,
-        enum: ["Admin", "Manager", "Staff"],
-        defaultValue: "Staff",
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       rentalId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      image: {
+        type: DataTypes.TEXT,
+        allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "Car",
     }
   );
-  return User;
+  return Car;
 };
