@@ -52,8 +52,6 @@ const register = async (req, res, next) => {
       userId: newUser.id,
     });
 
-    console.log(test);
-
     res.status(201).json({
       status: "Success",
       data: {

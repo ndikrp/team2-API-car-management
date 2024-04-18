@@ -47,6 +47,9 @@ module.exports = (sequelize, DataTypes) => {
         enum: ["Admin", "Manager", "Staff"],
         defaultValue: "Staff",
       },
+      rentalId: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,

@@ -26,7 +26,6 @@ const createProduct = async (req, res, next) => {
         })
       );
     }
-
     let rentalId;
     if (req.user.role === "Admin") {
       if (!req.body.rentalId) {
@@ -77,7 +76,7 @@ const findProducts = async (req, res, next) => {
     if (username) includeUserCondition.name = { [Op.iLike]: `${username}%` };
 
     const pageNum = parseInt(page) || 1;
-    const pageSize = parseInt(limit) || 10;
+    const pageSize = parseInt(limit) || 100;
     const offset = (pageNum - 1) * pageSize;
 
     let whereCondition = condition;
@@ -93,7 +92,7 @@ const findProducts = async (req, res, next) => {
 
     const totalCount = await Car.count({ where: whereCondition });
 
-    const products = await Car.findAll({
+    const car = await Car.findAll({
       include: [
         {
           model: Rental,
@@ -117,7 +116,7 @@ const findProducts = async (req, res, next) => {
     res.status(200).json({
       status: "Success",
       data: {
-        products,
+        car,
         pagination: {
           totalData: totalCount,
           totalPages,
@@ -133,26 +132,26 @@ const findProducts = async (req, res, next) => {
 
 const findProductById = async (req, res, next) => {
   try {
-    const product = await Car.findOne({
+    const car = await Car.findOne({
       where: {
         id: req.params.id,
       },
     });
 
-    if (!product) {
+    if (!car) {
       return next(
-        new ApiError(`product with this ${req.params.id} is not exist`, 404)
+        new ApiError(`car with this ${req.params.id} is not exist`, 404)
       );
     }
 
-    if (product.rentalId !== req.user.rentalId) {
-      return next(new ApiError("Your shop is not owner of this product", 401));
+    if (car.rentalId !== req.user.rentalId) {
+      return next(new ApiError("Your shop is not owner of this car", 401));
     }
 
     res.status(200).json({
       status: "Success",
       data: {
-        product,
+        car,
       },
     });
   } catch (err) {
@@ -161,13 +160,12 @@ const findProductById = async (req, res, next) => {
 };
 
 const UpdateProduct = async (req, res, next) => {
-  const { name, price, stock } = req.body;
+  const { name, rentPrice } = req.body;
   try {
-    const product = await Car.update(
+    const car = await Car.update(
       {
         name,
-        price,
-        stock,
+        rentPrice,
       },
       {
         where: {
@@ -186,15 +184,15 @@ const UpdateProduct = async (req, res, next) => {
 };
 
 const deleteProduct = async (req, res, next) => {
-  const { name, price, stock } = req.body;
+  const { name, rentPrice } = req.body;
   try {
-    const product = await Car.findOne({
+    const car = await Car.findOne({
       where: {
         id: req.params.id,
       },
     });
 
-    if (!product) {
+    if (!car) {
       next(new ApiError("Product id tersebut gak ada", 404));
     }
 

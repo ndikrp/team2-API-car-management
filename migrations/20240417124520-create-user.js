@@ -29,6 +29,9 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
+      rentalId: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
