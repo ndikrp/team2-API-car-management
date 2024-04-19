@@ -6,7 +6,12 @@
 
 ## About The Project
 
-About project dsini
+- Anggota Tim
+  Andhika Rizki Aulia
+  Gita Marendes
+  Hafiedz Hasmy Hamid
+  Rafli Kharisma Akbar
+  Rendi Hardiartama
 
 ### Database Diagram
 
