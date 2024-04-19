@@ -5,9 +5,13 @@ const ApiError = require("../utils/apiError");
 
 const register = async (req, res, next) => {
   try {
-    const { name, email, password, age, address, role, image } = req.body;
+    if (req.user.role === "Staff") {
+      return next(
+        new ApiError("Staff is not allowed to register new users", 403)
+      );
+    }
+    const { name, email, password, confirmPassword, age, address } = req.body;
 
-    // validasi untuk check apakah email nya udah ada
     const user = await Auths.findOne({
       where: {
         email,
@@ -33,18 +37,29 @@ const register = async (req, res, next) => {
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
 
-    let rentalId = req.user.rentalId;
-    if (req.user.role === "Admin" && req.body.rentalId) {
+    let rentalId;
+    let role;
+    if (req.user.role === "Admin") {
+      // if user = "Admin"
+      role = req.body.role;
+      if (!req.body.rentalId) {
+        return next(
+          new ApiError("Admin must input rentalId in the request body", 400)
+        );
+      }
       rentalId = req.body.rentalId;
+    } else if (req.user.role === "Manager") {
+      // if use not "Admin"
+      role = "Staff";
+      rentalId = req.user.rentalId;
     }
 
     const newUser = await User.create({
       name,
       address,
       age,
-      role,
-      image,
       rentalId,
+      role,
     });
     const test = await Auths.create({
       email,
@@ -68,7 +83,11 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
+    // validated email
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      return next(new ApiError("Invalid email format", 400));
+    }
     const user = await Auths.findOne({
       where: {
         email,
@@ -98,7 +117,7 @@ const login = async (req, res, next) => {
         data: token,
       });
     } else {
-      next(new ApiError("wrong password atau user gak ada", 400));
+      next(new ApiError("wrong password or user not found", 400));
     }
   } catch (err) {
     next(new ApiError(err.message, 500));
