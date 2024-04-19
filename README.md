@@ -7,11 +7,17 @@
 ## About The Project
 
 - Anggota Tim
+  <br>
   Andhika Rizki Aulia
+  <br>
   Gita Marendes
+  <br>
   Hafiedz Hasmy Hamid
+  <br>
   Rafli Kharisma Akbar
+  <br>
   Rendi Hardiartama
+  <br>
 
 ### Database Diagram
 
