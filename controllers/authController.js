@@ -29,14 +29,13 @@ const register = async (req, res, next) => {
     }
 
     // minimum password length
-    if (password !== confirmPassword) {
-      next(new ApiError("password does not match", 400));
-    }
+    // if (password !== confirmPassword) {
+    //   next(new ApiError("password does not match", 400));
+    // }
 
     // hashing password
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
-    const hashedConfirmPassword = bcrypt.hashSync(confirmPassword, saltRounds);
 
     let rentalId;
     let role;
@@ -65,11 +64,8 @@ const register = async (req, res, next) => {
     const test = await Auths.create({
       email,
       password: hashedPassword,
-      confirmPassword: hashedConfirmPassword,
       userId: newUser.id,
     });
-
-    console.log(test);
 
     res.status(201).json({
       status: "Success",
@@ -77,7 +73,6 @@ const register = async (req, res, next) => {
         ...newUser,
         email,
         password: hashedPassword,
-        confirmPassword: hashedConfirmPassword,
       },
     });
   } catch (err) {
