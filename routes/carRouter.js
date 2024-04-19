@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const Product = require("../controllers/productController");
+
+const Car = require("../controllers/carController");
 
 const upload = require("../middlewares/uploader");
 const autentikasi = require("../middlewares/authenticate");
@@ -11,11 +12,11 @@ router.post(
   autentikasi,
   checkRole(["Admin", "Manager"]),
   upload.array("images"),
-  Product.createProduct
+  Car.createProduct
 );
-router.get("/", autentikasi, Product.findProducts);
-router.get("/:id", autentikasi, Product.findProductById);
-router.patch("/:id", Product.UpdateProduct);
-router.delete("/:id", Product.deleteProduct);
+router.get("/", autentikasi, Car.findProducts);
+router.get("/:id", autentikasi, Car.findProductById);
+router.patch("/:id", Car.UpdateProduct);
+router.delete("/:id", Car.deleteProduct);
 
 module.exports = router;

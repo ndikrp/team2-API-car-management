@@ -19,11 +19,12 @@ const findUsers = async (req, res, next) => {
 
 const findUserById = async (req, res, next) => {
   try {
-    const user = await User.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
+    const userId = req.params.id;
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      throw new ApiError(`Cannot find user with id : ${userId}`, 404);
+    }
 
     res.status(200).json({
       status: "Success",
@@ -37,15 +38,22 @@ const findUserById = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-  const { name, age, role, address, shopId } = req.body;
+  const { name, age, address, role } = req.body;
+
   try {
+    const userId = req.params.id;
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      throw new ApiError(`Cannot find user with id : ${userId}`, 404);
+    }
+
     await User.update(
       {
         name,
         age,
-        role,
         address,
-        shopId,
+        role,
       },
       {
         where: {
@@ -56,7 +64,7 @@ const updateUser = async (req, res, next) => {
 
     res.status(200).json({
       status: "Success",
-      message: "sukses update user",
+      message: "User update successfully",
     });
   } catch (err) {
     next(new ApiError(err.message, 400));
@@ -65,14 +73,11 @@ const updateUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const user = await User.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
+    const userId = req.params.id;
+    const user = await User.findByPk(userId);
 
     if (!user) {
-      next(new ApiError("User id tersebut gak ada", 404));
+      throw new ApiError(`User with id : ${userId} doesn't exist`, 404);
     }
 
     await User.destroy({
@@ -83,7 +88,7 @@ const deleteUser = async (req, res, next) => {
 
     res.status(200).json({
       status: "Success",
-      message: "sukses delete user",
+      message: "User deleted",
     });
   } catch (err) {
     next(new ApiError(err.message, 400));
