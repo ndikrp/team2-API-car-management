@@ -7,11 +7,27 @@
 ## About Project
 
 - Anggota Tim
-  Andhika Rizki Aulia
-  Gita Marendes
-  Hafiedz Hasmy Hamid
-  Rafli Kharisma Akbar
-  Rendi Hardiartama
+  - Andhika Rizki Aulia
+  - Gita Marendes
+  - Hafiedz Hasmy Hamid
+  - Rafli Kharisma Akbar
+  - Rendi Hardiartama
+
+<br>
+
+- Pembagian Tugas
+  - Auths : Rendi
+  - Users : Gita
+  - Car : Andhika
+  - Rental : Hafiedz
+  - Details : Rafli
+
+<br>
+
+- Role Access
+  - Admin : Registrasi manager & staff, melihat semua data, dan update semua data
+  - Manager : Update Rental, melihat data di rentalnya, register staff, & update car di rentalnya
+  - Staff : Melihat data di rentalnya
 
 <br>
 

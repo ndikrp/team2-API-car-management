@@ -12,7 +12,7 @@ router.post(
   autentikasi,
   checkRole(["Admin", "Manager"]),
   upload.array("images"),
-  Car.createProduct
+  Car.createCar
 );
 router.get("/", autentikasi, checkRole(["Admin"]), Car.findProducts);
 router.get("/:id", autentikasi, checkOwnership, Car.findProductById);
