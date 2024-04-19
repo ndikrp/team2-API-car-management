@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Auths } = require("../models");
 const imagekit = require("../lib/imagekit");
 const ApiError = require("../utils/apiError");
 
@@ -85,6 +85,12 @@ const deleteUser = async (req, res, next) => {
         id: req.params.id,
       },
     });
+
+    await Auths.destroy({
+      where : {
+        userId : req.params.id
+      }
+    })
 
     res.status(200).json({
       status: "Success",
