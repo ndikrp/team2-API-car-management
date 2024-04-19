@@ -28,9 +28,9 @@ const register = async (req, res, next) => {
       return next(new ApiError("Minimum password must be 8 character", 400));
     }
 
-    // minimum password length
+    // confirm password match
     if (password !== confirmPassword) {
-      next(new ApiError("password does not match", 400));
+      return next(new ApiError("password does not match", 400));
     }
 
     // hashing password
