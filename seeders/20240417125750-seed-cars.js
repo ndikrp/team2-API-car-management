@@ -20,7 +20,7 @@ module.exports = {
         rentalId: 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        image: JSON.stringify(["gambarmazda.png"]),
+        image: "gambarhonda.png",
       },
       {
         name: "Innova",
@@ -29,7 +29,7 @@ module.exports = {
         rentalId: 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        image: JSON.stringify(["gambarmazda.png"]),
+        image: "gambarinnova.png",
       },
       {
         name: "Mazda",
@@ -38,7 +38,7 @@ module.exports = {
         rentalId: 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        image: JSON.stringify(["gambarmazda.png"]),
+        image: "gambarmazda.png",
       },
       {
         name: "BMW",
@@ -47,7 +47,7 @@ module.exports = {
         rentalId: 2,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        image: JSON.stringify(["gambarmazda.png"]),
+        image: "gambarbmw.png",
       },
       {
         name: "McLaren",
@@ -56,7 +56,7 @@ module.exports = {
         rentalId: 2,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        image: JSON.stringify(["gambarmazda.png"]),
+        image: "gambarmclaren.png",
       },
     ]);
   },

@@ -31,15 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       city: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      carId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
+      }
     },
     {
       sequelize,

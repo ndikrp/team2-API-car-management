@@ -26,9 +26,8 @@ module.exports = {
         allowNull: false,
       },
       image: {
-        type: Sequelize.JSONB,
+        type: Sequelize.TEXT,
         allowNull: false,
-        defaultValue: [],
       },
       createdAt: {
         allowNull: false,

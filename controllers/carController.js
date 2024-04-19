@@ -140,7 +140,7 @@ const findProductById = async (req, res, next) => {
 
     if (!car) {
       return next(
-        new ApiError(`car with this ${req.params.id} is not exist`, 404)
+        new ApiError(`Car with this ID ${req.params.id} is not exist`, 404)
       );
     }
 
@@ -176,7 +176,8 @@ const UpdateProduct = async (req, res, next) => {
 
     res.status(200).json({
       status: "Success",
-      message: "sukses update produk",
+      message: "Succesfuly update product",
+      updatedProduct: car,
     });
   } catch (err) {
     next(new ApiError(err.message, 400));
@@ -193,7 +194,7 @@ const deleteProduct = async (req, res, next) => {
     });
 
     if (!car) {
-      next(new ApiError("Product id tersebut gak ada", 404));
+      return next(new ApiError("Product with this id is not exist", 404));
     }
 
     await Car.destroy({
@@ -204,7 +205,8 @@ const deleteProduct = async (req, res, next) => {
 
     res.status(200).json({
       status: "Success",
-      message: "sukses delete produk",
+      message: "Succesfuly delete product",
+      deletedProduct: car,
     });
   } catch (err) {
     next(new ApiError(err.message, 400));
