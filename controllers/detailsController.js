@@ -14,7 +14,7 @@ const getDetails = async (req, res, next) => {
     const pageNum = parseInt(page) || 1;
     const pageSize = parseInt(limit) || 10;
     const offset = (pageNum - 1) * pageSize;
-    
+
     let whereCondition = condition;
     const totalCount = await Details.count({ where: whereCondition });
     const totalPages = Math.ceil(totalCount / pageSize);
@@ -59,11 +59,11 @@ const createDetails = async (req, res, next) => {
     if (files) {
       await Promise.all(
         files.map(async (file) => {
-          // dapatkan extension file nya
+          
           const split = file.originalname.split(".");
           const extension = split[split.length - 1];
 
-          // upload file ke imagekit
+      
           const uploadedImage = await imagekit.upload({
             file: file.buffer,
             fileName: `IMG-${Date.now()}.${extension}`,
@@ -89,7 +89,62 @@ const createDetails = async (req, res, next) => {
   }
 };
 
+
+const findDetailsById = async (req, res, next) => {
+  try {
+    const details = await Details.findOne({
+      where: {
+        id: req.params.id,
+      },
+      include: [
+        {
+          model: Car,
+          attributes: ["id", "name", "rentalId", "rentPrice" ],
+        }
+      ]
+    });
+
+    if (!details) {
+      return next(
+        new ApiError(`car's detail with this ${req.params.id} is not exist`, 404)
+      );
+    }
+
+   
+
+    res.status(200).json({
+      status: "Success",
+      data: {
+        details,
+      },
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 400));
+  }
+};
+
+const deleteDetails = async (req, res, next) => {
+  const id = req.params.id;
+
+  try {
+    await Details.destroy({
+      where: {
+        id,
+      },
+    });
+
+    res.status(200).json({
+      status: "Success",
+      message: "Success delete product",
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 400));
+  }
+};
+
 module.exports = {
   getDetails,
   createDetails,
+  findDetailsById,
+  deleteDetails
 };
