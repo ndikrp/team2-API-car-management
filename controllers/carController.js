@@ -1,5 +1,5 @@
 const multer = require("multer");
-const { Car, Rental, User } = require("../models");
+const { Car, Rental, User, Details } = require("../models");
 const imagekit = require("../lib/imagekit");
 const ApiError = require("../utils/apiError");
 const { Op } = require("sequelize");
@@ -29,12 +29,7 @@ const createProduct = async (req, res, next) => {
     let rentalId;
     if (req.user.role === "Admin") {
       if (!req.body.rentalId) {
-        return next(
-          new ApiError(
-            "The 'rentalId' field is required to create a product. Please provide the 'rentalId' in the request body.",
-            400
-          )
-        );
+        return next(new ApiError("The 'rentalId' field is required to create a product. Please provide the 'rentalId' in the request body.", 400));
       }
       rentalId = req.body.rentalId;
     } else {
@@ -139,9 +134,7 @@ const findProductById = async (req, res, next) => {
     });
 
     if (!car) {
-      return next(
-        new ApiError(`Car with this ID ${req.params.id} is not exist`, 404)
-      );
+      return next(new ApiError(`Car with this ID ${req.params.id} is not exist`, 404));
     }
 
     if (car.rentalId !== req.user.rentalId) {
@@ -193,6 +186,12 @@ const deleteProduct = async (req, res, next) => {
       },
     });
 
+    const details = await Details.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
     if (!car) {
       return next(new ApiError("Product with this id is not exist", 404));
     }
@@ -203,10 +202,17 @@ const deleteProduct = async (req, res, next) => {
       },
     });
 
+    await Details.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+
     res.status(200).json({
       status: "Success",
       message: "Succesfuly delete product",
-      deletedProduct: car,
+      deletedCars: car,
+      deletedDetails: details,
     });
   } catch (err) {
     next(new ApiError(err.message, 400));

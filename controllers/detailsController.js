@@ -123,6 +123,49 @@ const findDetailsById = async (req, res, next) => {
   }
 };
 
+const updateDetails = async (req, res, next) => {
+  const { carId } = req.body;
+  const files = req.files;
+  let images = [];
+
+  try {
+    if (files) {
+      await Promise.all(
+        files.map(async (file) => {
+          const split = file.originalname.split(".");
+          const extension = split[split.length - 1];
+
+          const uploadedImage = await imagekit.upload({
+            file: file.buffer,
+            fileName: `IMG-${Date.now()}.${extension}`,
+          });
+          images.push(uploadedImage.url);
+        })
+      );
+    }
+
+    await Details.update(
+      {
+        carId,
+        imageUrl: images,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+
+    res.status(200).json({
+      status: "Success",
+      message: "Success update details",
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 400));
+  }
+};
+
+
 const deleteDetails = async (req, res, next) => {
   const id = req.params.id;
 
@@ -135,7 +178,7 @@ const deleteDetails = async (req, res, next) => {
 
     res.status(200).json({
       status: "Success",
-      message: "Success delete product",
+      message: "Success delete details",
     });
   } catch (err) {
     next(new ApiError(err.message, 400));
@@ -146,5 +189,6 @@ module.exports = {
   getDetails,
   createDetails,
   findDetailsById,
-  deleteDetails
+  updateDetails,
+  deleteDetails,
 };
