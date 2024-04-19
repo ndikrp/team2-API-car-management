@@ -12,11 +12,11 @@ router.post(
   autentikasi,
   checkRole(["Admin", "Manager"]),
   upload.array("images"),
-  Car.createProduct
+  Car.createCar
 );
-router.get("/", autentikasi, Car.findProducts);
-router.get("/:id", autentikasi, Car.findProductById);
-router.patch("/:id", Car.UpdateProduct);
-router.delete("/:id", Car.deleteProduct);
+router.get("/", autentikasi, Car.findCars);
+router.get("/:id", autentikasi, Car.findCarById);
+router.patch("/:id", Car.UpdateCar);
+router.delete("/:id", Car.deleteCar);
 
 module.exports = router;
