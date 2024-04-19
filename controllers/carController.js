@@ -65,38 +65,18 @@ const createProduct = async (req, res, next) => {
 
 const findProducts = async (req, res, next) => {
   try {
-    const { productName, username, shop, page, limit } = req.query;
-    const condition = {};
-    if (productName) condition.name = { [Op.iLike]: `%${productName}%` };
-
-    const includeShopCondition = {};
-    if (shop) includeShopCondition.name = { [Op.iLike]: `%${shop}%` };
-
-    const includeUserCondition = {};
-    if (username) includeUserCondition.name = { [Op.iLike]: `${username}%` };
+    const { page, limit } = req.query;
 
     const pageNum = parseInt(page) || 1;
-    const pageSize = parseInt(limit) || 100;
+    const pageSize = parseInt(limit) || 10;
     const offset = (pageNum - 1) * pageSize;
 
-    let whereCondition = condition;
-
-    if (req.user.role === "Admin") {
-      whereCondition;
-    } else {
-      whereCondition = {
-        ...condition,
-        rentalId: req.user.rentalId,
-      };
-    }
-
-    const totalCount = await Car.count({ where: whereCondition });
+    const totalCount = await Car.count();
 
     const car = await Car.findAll({
       include: [
         {
           model: Rental,
-          where: includeShopCondition,
           attributes: ["id", "name"],
         },
         {
@@ -104,7 +84,6 @@ const findProducts = async (req, res, next) => {
           attributes: ["name"],
         },
       ],
-      where: whereCondition,
       order: [["id", "ASC"]],
       attributes: ["name", "rentPrice", "userId", "createdAt", "updatedAt"],
       limit: pageSize,
