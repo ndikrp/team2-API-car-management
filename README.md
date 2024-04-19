@@ -4,7 +4,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About The Project
+## About Project
 
 - Anggota Tim
   Andhika Rizki Aulia
@@ -12,6 +12,22 @@
   Hafiedz Hasmy Hamid
   Rafli Kharisma Akbar
   Rendi Hardiartama
+
+<br>
+
+- Pembagian Tugas
+  Auths : Rendi
+  Users : Gita
+  Car : Andhika
+  Rental : Hafiedz
+  Details : Rafli
+
+<br>
+
+- Role Access
+  Admin : Registrasi manager & staff, melihat semua data, dan update semua data
+  Manager : Update Rental, melihat data di rentalnya, register staff, & update car di rentalnya
+  Staff : Melihat data di rentalnya
 
 ### Database Diagram
 
@@ -83,15 +99,15 @@ npm start
 
 ## Progress
 
-- [ ] API
-  - [ ] API Auths
-  - [ ] API User
-  - [ ] API Car
-  - [ ] API Rental
-  - [ ] API Details
+- [x] API
+  - [x] API Auths
+  - [x] API User
+  - [x] API Car
+  - [x] API Rental
+  - [x] API Details
 - [ ] Middleware
-- [ ] Dokumentasi API (OpenAPI)
-- [ ] Tambah kalau masih ada...
+- [ ] Validasi Tiap API / Resources
+- [ ] Dokumentasi API
 
 <!-- API Docs -->
 
