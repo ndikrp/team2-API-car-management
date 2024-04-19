@@ -7,18 +7,8 @@ const checkOwnership = require("../middlewares/checkOwnership");
 router.get("/", Rental.getRentals);
 router.get("/:id", Rental.getRentalById);
 
-router.post(
-  "/",
-  authenticate,
-  checkRole(["Admin", "Manager"]),
-  Rental.createRental
-);
-router.delete(
-  "/:id",
-  authenticate,
-  checkRole(["Admin", "Manager"]),
-  Rental.deleteRental
-);
+router.post("/", authenticate, checkRole(["Admin"]), Rental.createRental);
+router.delete("/:id", authenticate, checkRole(["Admin"]), Rental.deleteRental);
 
 router.patch(
   "/:id",
