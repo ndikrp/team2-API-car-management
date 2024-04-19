@@ -14,9 +14,15 @@ router.post(
   upload.array("images"),
   Car.createProduct
 );
-router.get("/", autentikasi, Car.findProducts);
-router.get("/:id", autentikasi, Car.findProductById);
-router.patch("/:id", Car.UpdateProduct);
-router.delete("/:id", Car.deleteProduct);
+router.get("/", autentikasi, checkRole(["Admin"]), Car.findProducts);
+router.get("/:id", autentikasi, checkOwnership, Car.findProductById);
+router.patch("/:id", autentikasi, checkOwnership, Car.UpdateProduct);
+router.delete(
+  "/:id",
+  autentikasi,
+  checkRole(["Admin", "Manager"]),
+  checkOwnership,
+  Car.deleteProduct
+);
 
 module.exports = router;

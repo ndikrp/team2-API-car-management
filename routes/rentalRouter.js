@@ -4,8 +4,8 @@ const authenticate = require("../middlewares/authenticate");
 const checkRole = require("../middlewares/checkRole");
 const checkOwnership = require("../middlewares/checkOwnership");
 
-router.get("/", Rental.getRentals);
-router.get("/:id", Rental.getRentalById);
+router.get("/", authenticate, checkRole(["Admin"]), Rental.getRentals);
+router.get("/:id", authenticate, checkOwnership, Rental.getRentalById);
 
 router.post("/", authenticate, checkRole(["Admin"]), Rental.createRental);
 router.delete("/:id", authenticate, checkRole(["Admin"]), Rental.deleteRental);
