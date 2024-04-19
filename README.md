@@ -1,67 +1,101 @@
-**LUPAAAA : NAMA REPO PROJECT PER TIM NYA YG CANTIK SESUAI APLIKASI YANG DIKERJAKANNYA YAH!!!**
-contoh : team10-API-perpustakaan
+<div align="center">
+  <h3> Tim 2 - API Car Management </h3>
+</div>
 
-requirement mini final project backend :
+<!-- ABOUT THE PROJECT -->
 
-1. REST API => CRUD, tapi gak cuman : contoh register, login, /me => check token ini punya siapa.
-2. Dashboard dan fungsi API nya => CRUD setiap resource, ada filter dan search, implementasi pagination. Sidebar/navbar => tiap orang 1 menu/resources **OPTIONAL**
-   3 table nya minimal 5, setiap orang 1 table/resource
-3. setiap API itu ada validation (minimal password berapa length, email sudah ada dan lain2)
+## About The Project
 
-4. setiap API bikin kreatif/sesuai sistem kalian, maksud nya ? jadi kaya yg dibawah ini :
-   sesuai db diagram, terdapat 4 resources dalam sistem kita : user, auth, product dan shop.
+About project dsini
 
-   1. ASSOCIATE antar models sesuai database diagram nya => INCLUDE, contoh nya : get product include jg model user dan shop nya.
-   2. **PELAJARI SENDIRI SEEDER di SEQUELIZE**, lakukan seeder baik **MONGOOSE ataupun SEQUELIZE**.
-   3. Buat middleware baru dengan logic kalian, middleware check apakah user pemilik shop (checkOwnership), kunci nya userId pada Shops table
-   4. misal : API buat get data product by id, hanya bisa diakses oleh staff/manajer toko nya.
-   5. misal : API untuk : update dan delete product hanya bisa dilakukan oleh owner pemilik toko, gunakan **middleware checkOwnership**.
-   6. misal : API create product, saat user create product itu **shop id** nya / toko nya sesuai dengan user yang buat.
-   7. setiap API untuk get data **INCLUDE** models yang mempunyai relasi nyya, berikan di data pada response API nya.
-   8. pinter mainin attributes nya, jadi jangan semua data dikirim sebagai response API nya.
-   9. di API get all data, implementasi : DINAMIS SEARCH, FILTER, PAGINATION, SORTING dan **advance query (search query bisa ke relasi table, contoh saat API get product bisa search by shop name nya)**
+### Database Diagram
 
-5. Sequelize ataupun Mongoose, buat serapih mungkin : **DATABASE CREDENTIALS** di sembunyikan, perintah2 nya migration/seeder/create dan undo2 nya, dibikin di dalam script package.json. **.SEQUELIZERC** jangan lupa diterapin.
-6. Implementasi : Design Pattern MVC, upload image jangan di local (server => cloudinary/imagekit **HATI2 CREDENTIALS nya**)
-7. ada implementasi 1 table ada kolom yg banyak image, 1 table ada kolom yg single image.
-8. OPEN API => swagger **PELAJARI SENDIRI** bisa liat di referensi challenge yg udh aku kasih => **setiap orang kerjakan resource**
-9. implementasi GOOGLE OAUTH **PELAJARI SENDIRI** **OPTIONAL**
-10. implementasi PAYMENT GATEWAY **PELAJARI SENDIRI** **OPTIONAL BANGET!!!**
-11. implementasi JOOI utk validasi **PELAJARI SENDIRI** **OPTIONAL BANGET**
-12. implementasi SENDING EMAIL saat user sukses di create **PELAJARI SENDIRI** **OPTIONAL BANGET!!!**
-13. implementasi SENDING SMS ke Manajer/ADMIN/PEMILIK TOKO saat ada data di edit oleh STAFF **PELAJARI SENDIRI** **OPTIONAL BANGET!!!**
-14. implementasi VERIFY USER dengan token/link verifikasi dari email yang dikirim saat user di create **PELAJARI SENDIRI** **OPTIONAL BANGET!!!**
-15. database diagram dan readme markdown dibikin sejelas dan secantik mungkin.
-16. MAIN PULL REQUEST dan COMMIT MESSAGE SEBAIK MUNGKIN => terutama lead nya.
-17. naming VARIABLE/FUNCTION/KOLOM TABLE dan lainnya konsisten bahasa inggris, bahkan error dan sukses message bahasa inggris
-18. Postman collection attach di readme ini
-19. di readme markdown detail ceritain tentang aplikasi kalian, spt apa nama nya, tujuannya, fitur2 apa aja yg ada sekarang, development kedepannya fitur apa yang bisa kalian tambahkan, database diagram dan lainnya. Seperti contoh di repo ini, liat di bagian bawah readme ini.
+![Database Diagram](./docs/erd_tim2.png)
 
-    notes :
-    optional => level 1 (boleh kalau MVP nya udah)
-    optional banget => level 2 (bolehlah)
-    optional banget!!! => level 3 (gak usah)
+### Built With
 
-![My Image](/public/img/db-diagram.png)
+Tech stack atau framework yang digunakan pada aplikasi ini
 
-Management Branch Shop per City
-Aplikasi ini untuk kantor pusat, melakukan manajerial toko per kota....
+<ul>
+   <li> Express JS 
+   <li> Postgres 
+   <li> Sequelize 
+</ul>
 
-yang dapat dilakukan aplikasi :
+<!-- GETTING STARTED -->
 
-- CRUD produk sesuai ...
-- .....
-- .....
+## Getting Started
 
-berikut database diagram nya :
-![My Image](/public/img/db-diagram-v2.jpg)
+Berikut adalah contoh untuk memasuki folder aplikasi.
 
-Yang bisa dikembangkan kedepannya
+```bash
+# Clone repository terlebih dahulu
 
-- aplikasi dapat dikembangkan menjadi toko per branch, bukan lagi toko per kota
-- .....
-- .....
+git clone https://github.com/ndikrp/team2-API-car-management.git
 
-### API DOCUMENTATION
+cd team2-API-management
 
-- [API DOCUMENTATION](https://documenter.getpostman.com/view/11108135/2sA3BkbY87)
+code .
+
+```
+
+### Prerequisites
+
+Cara menjalankan aplikasi dan menginstall package yang dibutuhkan
+
+1. Buat file .env terlebih dahulu dan isi dari file .env adalah sebagai berikut :
+
+```bash
+DB_USERNAME= # Username Postgres
+DB_PASSWORD= # Password Postgres
+DB_NAME= # Nama Database
+DB_PORT= # Port Database
+DB_HOST= # Host Database (localhost / 127.0.0.1)
+PORT= # Port Aplikasi
+JWT_SECRET= # Secret Key (bisa random)
+JWT_EXPIRED= # Kapan Token JWT expire
+
+# Variabel yang dibutuhkan untuk upload image ke imagekit
+IMAGEKIT_PUBLIC_KEY=
+IMAGEKIT_PRIVATE_KEY=
+IMAGEKIT_URL=
+```
+
+2. Install package, dan jalankan aplikasi
+
+```bash
+# Install Package
+npm install
+
+# Membuat Database menggunakan sequelize-cli
+npm run db:all
+
+# Run Aplikasi
+npm start
+```
+
+<!-- ROADMAP -->
+
+## Progress
+
+- [ ] API
+  - [ ] API Auths
+  - [ ] API User
+  - [ ] API Car
+  - [ ] API Rental
+  - [ ] API Details
+- [ ] Middleware
+- [ ] Dokumentasi API (OpenAPI)
+- [ ] Tambah kalau masih ada...
+
+<!-- API Docs -->
+
+## API Documentaion
+
+soon...
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
