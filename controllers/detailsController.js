@@ -1,15 +1,48 @@
-const { Details } = require("../models");
+const { Details, Car } = require("../models");
 const imagekit = require("../lib/imagekit");
 const ApiError = require("../utils/apiError");
+const { Op } = require("sequelize");
 
 const getDetails = async (req, res, next) => {
   try {
-    const details = await Details.findAll();
+    const { carId, page, limit } = req.query;
+
+    const condition = {};
+    if (carId) condition.carId = { [Op.iLike]: `%${carId}%` };
+
+
+    const pageNum = parseInt(page) || 1;
+    const pageSize = parseInt(limit) || 10;
+    const offset = (pageNum - 1) * pageSize;
+    
+    let whereCondition = condition;
+    const totalCount = await Details.count({ where: whereCondition });
+    const totalPages = Math.ceil(totalCount / pageSize);
+   
+
+
+    const details = await Details.findAll({
+      include: [
+        {
+          model: Car,
+          attributes: ["id", "name"],
+        },
+      ],
+      order: [["id", "ASC"]],
+      limit:pageSize,
+      offset:offset
+    });
 
     res.status(200).json({
       status: "Success",
       data: {
         car_details: details,
+        pagination: {
+          totalData: totalCount,
+          totalPages,
+          pageNum,
+          pageSize,
+        }
       },
     });
   } catch (err) {
@@ -18,7 +51,7 @@ const getDetails = async (req, res, next) => {
 };
 
 const createDetails = async (req, res, next) => {
-  const { imageUrl, carId } = req.body;
+  const { carId } = req.body;
   const files = req.files;
   let images = [];
 
