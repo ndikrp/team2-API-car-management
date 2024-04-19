@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User, Auth } = require("../models");
+const { User, Auths } = require("../models");
 const ApiError = require("../utils/apiError");
 
 module.exports = async (req, res, next) => {
@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
 
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findByPk(payload.id, {
-      include: ["Auth"],
+      include: Auths,
     });
 
     req.user = user;

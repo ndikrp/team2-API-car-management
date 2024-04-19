@@ -19,19 +19,19 @@ const register = async (req, res, next) => {
     });
 
     if (user) {
-      next(new ApiError("User email already taken", 400));
+      return next(new ApiError("User email already taken", 400));
     }
 
     // minimum password length
     const passwordLength = password <= 8;
     if (passwordLength) {
-      next(new ApiError("Minimum password must be 8 character", 400));
+      return next(new ApiError("Minimum password must be 8 character", 400));
     }
 
-    // minimum password length
-    // if (password !== confirmPassword) {
-    //   next(new ApiError("password does not match", 400));
-    // }
+    // confirm password match
+    if (password !== confirmPassword) {
+      return next(new ApiError("password does not match", 400));
+    }
 
     // hashing password
     const saltRounds = 10;
