@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const Rental = require("../controllers/rentalController");
 const authenticate = require("../middlewares/authenticate");
 const checkRole = require("../middlewares/checkRole");
