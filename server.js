@@ -5,6 +5,8 @@ const morgan = require("morgan");
 
 const errorController = require("./controllers/errorController");
 const router = require("./routes");
+const swaggerUI = require('swagger-ui-express')
+const swaggerDoc = require('./docs/swagger.json')
 
 const app = express();
 app.use(express.json());
@@ -15,6 +17,8 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 app.use(morgan("dev"));
+app.use(['/api/v1/docs'], swaggerUI.serve)
+app.get(['/api/v1/docs'], swaggerUI.setup(swaggerDoc))
 app.use(router);
 
 app.use(errorController.onLost);

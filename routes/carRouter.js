@@ -16,7 +16,7 @@
   );
 
   router.get("/", autentikasi, Car.findCars);
-  router.get("/:id", autentikasi, Car.findCarById);
+  router.get("/:id", autentikasi, checkOwnership, Car.findCarById);
   router.patch("/:id", autentikasi, checkRole(["Admin", "Manager"]), Car.UpdateCar);
   router.delete("/:id", autentikasi, checkRole(["Admin"]), Car.deleteCar);
 
