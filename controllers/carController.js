@@ -4,7 +4,7 @@ const imagekit = require("../lib/imagekit");
 const ApiError = require("../utils/apiError");
 const { Op } = require("sequelize");
 
-const createProduct = async (req, res, next) => {
+const createCar = async (req, res, next) => {
   const { name, rentPrice } = req.body;
   const files = req.files;
   let images = [];
@@ -63,7 +63,7 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-const findProducts = async (req, res, next) => {
+const findCars = async (req, res, next) => {
   try {
     const { page, limit } = req.query;
 
@@ -109,7 +109,7 @@ const findProducts = async (req, res, next) => {
   }
 };
 
-const findProductById = async (req, res, next) => {
+const findCarById = async (req, res, next) => {
   try {
     const car = await Car.findOne({
       where: {
@@ -138,7 +138,7 @@ const findProductById = async (req, res, next) => {
   }
 };
 
-const UpdateProduct = async (req, res, next) => {
+const UpdateCar = async (req, res, next) => {
   const { name, rentPrice } = req.body;
   try {
     const car = await Car.update(
@@ -156,14 +156,14 @@ const UpdateProduct = async (req, res, next) => {
     res.status(200).json({
       status: "Success",
       message: "Succesfuly update product",
-      updatedProduct: car,
+      updatedCar: car,
     });
   } catch (err) {
     next(new ApiError(err.message, 400));
   }
 };
 
-const deleteProduct = async (req, res, next) => {
+const deleteCar = async (req, res, next) => {
   const { name, rentPrice } = req.body;
   try {
     const car = await Car.findOne({
@@ -185,7 +185,7 @@ const deleteProduct = async (req, res, next) => {
     res.status(200).json({
       status: "Success",
       message: "Succesfuly delete product",
-      deletedProduct: car,
+      deletedCar: car,
     });
   } catch (err) {
     next(new ApiError(err.message, 400));
@@ -193,9 +193,9 @@ const deleteProduct = async (req, res, next) => {
 };
 
 module.exports = {
-  createProduct,
-  findProducts,
-  findProductById,
-  UpdateProduct,
-  deleteProduct,
+  createCar,
+  findCars,
+  findCarById,
+  UpdateCar,
+  deleteCar,
 };
