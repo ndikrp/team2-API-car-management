@@ -133,6 +133,12 @@ const deleteUser = async (req, res, next) => {
       },
     });
 
+    await Auths.destroy({
+      where : {
+        userId : req.params.id
+      }
+    })
+
     res.status(200).json({
       status: "Success",
       message: "User deleted",
