@@ -29,22 +29,6 @@
   - Manager : Update Rental, melihat data di rentalnya, register staff, & update car di rentalnya
   - Staff : Melihat data di rentalnya
 
-<br>
-
-- Pembagian Tugas
-  Auths : Rendi
-  Users : Gita
-  Car : Andhika
-  Rental : Hafiedz
-  Details : Rafli
-
-<br>
-
-- Role Access
-  Admin : Registrasi manager & staff, melihat semua data, dan update semua data
-  Manager : Update Rental, melihat data di rentalnya, register staff, & update car di rentalnya
-  Staff : Melihat data di rentalnya
-
 ### Database Diagram
 
 ![Database Diagram](./docs/erd_tim2.png)
