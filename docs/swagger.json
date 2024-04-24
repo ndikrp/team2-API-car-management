@@ -1,0 +1,17 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Team Task 2 - Binar Academy",
+    "version": "1.0.0",
+    "description": "API with CRUD Operation and Auth function. This API is made to fulfill the task from kak Imam.",
+    "contact": {
+      "name": "Team Task 2",
+      "email": "teamtask@gmail.com",
+      "url": "https://jayajayajaya.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/ndikrp/team2-API-car-management/blob/main/LICENSE"
+    }
+  }
+}

@@ -62,18 +62,10 @@ const createCar = async (req, res, next) => {
 
 const findCars = async (req, res, next) => {
   try {
-    const { productName, username, shop, page, limit } = req.query;
-    const condition = {};
-    if (productName) condition.name = { [Op.iLike]: `%${productName}%` };
+    const { page, limit } = req.query;
 
-    const includeShopCondition = {};
-    if (shop) includeShopCondition.name = { [Op.iLike]: `%${shop}%` };
-
-    const includeUserCondition = {};
-    if (username) includeUserCondition.name = { [Op.iLike]: `${username}%` };
-
-    const pageNum = parseInt(page) || 1;
-    const pageSize = parseInt(limit) || 100;
+    const pageNum = parseInt(page)  || 1;
+    const pageSize = parseInt(limit)  || 100;
     const offset = (pageNum - 1) * pageSize;
     let whereCondition = condition;
 
@@ -92,7 +84,6 @@ const findCars = async (req, res, next) => {
       include: [
         {
           model: Rental,
-          where: includeShopCondition,
           attributes: ["id", "name"],
         },
         {
@@ -100,7 +91,6 @@ const findCars = async (req, res, next) => {
           attributes: ["name"],
         },
       ],
-      where: whereCondition,
       order: [["id", "ASC"]],
       attributes: ["name", "rentPrice", "userId", "createdAt", "updatedAt"],
       limit: pageSize,
