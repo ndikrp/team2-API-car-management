@@ -29,12 +29,9 @@ const createCar = async (req, res, next) => {
     let rentalId;
     if (req.user.role === "Admin") {
       if (!req.body.rentalId) {
-        return next(
-          new ApiError(
-            "The 'rentalId' field is required to create a car. Please provide the 'rentalId' in the request body.",
-            400
-          )
-        );
+        if (!req.body.rentalId) {
+          return next(new ApiError("The 'rentalId' field is required to create a car. Please provide the 'rentalId' in the request body.", 400));
+        }
       }
       rentalId = req.body.rentalId;
     } else {
@@ -138,9 +135,7 @@ const findCarById = async (req, res, next) => {
     });
 
     if (!car) {
-      return next(
-        new ApiError(`Car with this ID ${req.params.id} is not exist`, 404)
-      );
+      return next(new ApiError(`Car with this ID ${req.params.id} is not exist`, 404));
     }
 
     if (car.rentalId !== req.user.rentalId) {
