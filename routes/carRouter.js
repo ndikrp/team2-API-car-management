@@ -20,4 +20,4 @@
   router.patch("/:id", autentikasi, checkRole(["Admin", "Manager"]), Car.UpdateCar);
   router.delete("/:id", autentikasi, checkRole(["Admin"]), Car.deleteCar);
 
-  module.exports = router;
+module.exports = router;

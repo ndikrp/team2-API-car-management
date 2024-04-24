@@ -29,7 +29,9 @@ const createCar = async (req, res, next) => {
     let rentalId;
     if (req.user.role === "Admin") {
       if (!req.body.rentalId) {
-        return next(new ApiError("The 'rentalId' field is required to create a car. Please provide the 'rentalId' in the request body.", 400));
+        if (!req.body.rentalId) {
+          return next(new ApiError("The 'rentalId' field is required to create a car. Please provide the 'rentalId' in the request body.", 400));
+        }
       }
       rentalId = req.body.rentalId;
     } else {
@@ -65,8 +67,18 @@ const findCars = async (req, res, next) => {
     const pageNum = parseInt(page)  || 1;
     const pageSize = parseInt(limit)  || 100;
     const offset = (pageNum - 1) * pageSize;
+    let whereCondition = condition;
 
-    const totalCount = await Car.count();
+    if (req.user.role === "Admin") {
+      whereCondition;
+    } else {
+      whereCondition = {
+        ...condition,
+        rentalId: req.user.rentalId,
+      };
+    }
+
+    const totalCount = await Car.count({ where: whereCondition });
 
     const car = await Car.findAll({
       include: [
