@@ -17,29 +17,29 @@
   "tags": [
     {
       "name": "Auths",
-      "description": "API pada resources auth"
+      "description": "API for auth resources"
     },
     {
       "name": "Cars",
-      "description": "API pada resources car"
+      "description": "API for car resources"
     },
     {
       "name": "Rentals",
-      "description": "API pada resources rental"
+      "description": "API for rental resources"
     },
     {
       "name": "Details",
-      "description": "API pada resources detail"
+      "description": "API for detail resources"
     },
     {
       "name": "Users",
-      "description": "API pada resources user"
+      "description": "API for user resources"
     }
   ],
   "servers": [
     {
       "description": "Car Management API",
-      "url": "http://localhost:8000/api/v1"
+      "url": "http://localhost:8000/api/v1/"
     }
   ],
   "components": {
@@ -57,11 +57,11 @@
         "tags": ["Rentals"],
         "security": [
           {
-            "bearerAuth ": []
+            "bearerAuth": []
           }
         ],
-        "summary": "Melihat semua data yang ada di resource rental",
-        "description": "Melihat semua data yang ada di resource rental",
+        "summary": "View all rental data",
+        "description": "View all rental data",
         "responses": {
           "200": {
             "description": "Success Response",
@@ -148,7 +148,7 @@
             }
           },
           "400": {
-            "description": "JWT Malformed (Token tidak valid / tidak sesuai dengan format JWT)",
+            "description": "JWT Malformed",
             "content": {
               "application/json": {
                 "schema": {
@@ -166,20 +166,170 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Rental data is empty, please add data first"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Rentals"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create new rental",
+        "description": "Create new rental",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Rental name"
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "Rental city"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "newRental": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 3
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Rental Los Santos"
+                            },
+                            "city": {
+                              "type": "string",
+                              "example": "Los Santos"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access not granted!. Required role : Admin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please fill the data"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/rental/{id}": {
+    "/rentals/{id}": {
       "get": {
         "tags": ["Rentals"],
         "security": [
           {
-            "bearerAuth ": []
+            "bearerAuth": []
           }
         ],
-        "summary": "Melihat data rental berdasarkan id pada resource rental",
-        "description": "Melihat data rental berdasarkan id pada resource rental",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            },
+            "description": "rental id"
+          }
+        ],
+        "summary": "View rental data by id",
+        "description": "View rental data by id",
         "responses": {
           "200": {
             "description": "Success Response",
@@ -248,7 +398,7 @@
             }
           },
           "400": {
-            "description": "JWT Malformed (Token tidak valid / tidak sesuai dengan format JWT)",
+            "description": "JWT Malformed",
             "content": {
               "application/json": {
                 "schema": {
@@ -266,6 +416,26 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There's no rental with this id"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -273,25 +443,25 @@
         "tags": ["Rentals"],
         "security": [
           {
-            "bearerAuth ": []
+            "bearerAuth": []
           }
         ],
-        "summary": "Mengupdate data rental berdasarkan id",
-        "description": "Mengupdate data rental berdasarkan id",
+        "summary": "Update rental by id",
+        "description": "Update rental by id",
         "requestBody": {
           "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "Nama rental"
+                    "description": "Rental name"
                   },
                   "city": {
                     "type": "string",
-                    "description": "Kota rental"
+                    "description": "Rental city"
                   }
                 }
               }
@@ -370,7 +540,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Akses anda tidak diterima. Role yang memiliki akses : Admin atau Manager"
+                      "example": "Access not granted!. Required role : Admin or Manager"
                     }
                   }
                 }
@@ -390,7 +560,131 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Silahkan input data yang mau diubah"
+                      "example": "Please input your data!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There's no rental with this id"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Rentals"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete rental by id",
+        "description": "Delete rental by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            },
+            "description": "rental id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Rental deleted successfully :("
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access / No Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access not granted!. Required role : Admin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "JWT Malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There's no rental with this id"
                     }
                   }
                 }
