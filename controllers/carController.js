@@ -129,7 +129,7 @@ const findCarById = async (req, res, next) => {
     }
 
     if (car.rentalId !== req.user.rentalId) {
-      return next(new ApiError("Your shop is not owner of this car", 401));
+      return next(new ApiError("Your rental is not owner of this car", 401));
     }
 
     res.status(200).json({
@@ -146,7 +146,13 @@ const findCarById = async (req, res, next) => {
 const UpdateCar = async (req, res, next) => {
   const { name, rentPrice } = req.body;
   try {
-    const car = await Car.update(
+    const oldCar = await Car.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    const [updatedCount, updatedCars] = await Car.update(
       {
         name,
         rentPrice,
@@ -155,13 +161,22 @@ const UpdateCar = async (req, res, next) => {
         where: {
           id: req.params.id,
         },
+        returning: true, 
       }
     );
 
+    if (updatedCount === 0) {
+      return res.status(404).json({
+        status: "Error",
+        message: "Car not found",
+      });
+    }
+
     res.status(200).json({
       status: "Success",
-      message: "Succesfuly update car",
-      updatedCar: car,
+      message: "Successfully updated car",
+      updatedCar: updatedCars[0], 
+      previousCar: oldCar,
     });
   } catch (err) {
     next(new ApiError(err.message, 400));
