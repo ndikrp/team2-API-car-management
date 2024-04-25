@@ -70,9 +70,7 @@ const register = async (req, res, next) => {
     res.status(201).json({
       status: "Success",
       data: {
-        ...newUser,
-        email,
-        password: hashedPassword,
+        newUser,
       },
     });
   } catch (err) {

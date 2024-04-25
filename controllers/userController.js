@@ -2,15 +2,42 @@ const { User, Auths } = require("../models");
 const imagekit = require("../lib/imagekit");
 const ApiError = require("../utils/apiError");
 const bcrypt = require("bcrypt");
+const { Op } = require("sequelize");
 
 const findUsers = async (req, res, next) => {
   try {
-    const users = await User.findAll();
+    const { name, role, page, limit } = req.query;
+    const condition = {};
+
+    if (name) condition.name = { [Op.iLike]: `%${name}` };
+
+    if (role) condition.role = { [Op.iLike]: `%${role}` };
+
+    const pageNum = parseInt(page) || 1;
+    const pageSize = parseInt(limit) || 10;
+    const offset = (pageNum - 1) * pageSize;
+
+    let whereCondition = condition;
+    const totalCount = await User.count({ where: whereCondition });
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    const users = await User.findAll({
+      where: whereCondition,
+      order: [["id", "ASC"]],
+      limit: pageSize,
+      offset: offset,
+    });
 
     res.status(200).json({
       status: "Success",
       data: {
         users,
+        pagination: {
+          totalData: totalCount,
+          totalPages,
+          pageNum,
+          pageSize,
+        },
       },
     });
   } catch (err) {
@@ -39,7 +66,7 @@ const findUserById = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-  const { name, age, address, email, password, confirmPassword } = req.body;
+  const { name, age, address, password, confirmPassword } = req.body;
   let userId;
 
   try {
@@ -52,6 +79,34 @@ const updateUser = async (req, res, next) => {
     } else {
       userId = req.user.id;
     }
+
+    let image;
+    if (req.file) {
+      const split = req.file.originalname.split(".");
+      const extension = split[split.length - 1];
+      const uploadedImg = await imagekit.upload({
+        file: req.file.buffer,
+        fileName: `IMG-${Date.now()}.${extension}`,
+      });
+
+      image = uploadedImg.url;
+    }
+
+    await User.update(
+      {
+        name,
+        age,
+        address,
+        image,
+      },
+      {
+        where: {
+          id: userId,
+        },
+      }
+    );
+
+    const updatedUser = await User.findByPk(userId);
 
     let hashedPassword;
     if (password) {
@@ -70,34 +125,16 @@ const updateUser = async (req, res, next) => {
       hashedPassword = bcrypt.hashSync(password, saltRounds);
     }
 
-    await User.update(
+    await Auths.update(
       {
-        name,
-        age,
-        address,
+        password: hashedPassword,
       },
       {
         where: {
-          id: userId,
+          userId: userId,
         },
       }
     );
-
-    const updatedUser = await User.findByPk(userId);
-
-    if (email || hashedPassword) {
-      await Auths.update(
-        {
-          email,
-          password: hashedPassword,
-        },
-        {
-          where: {
-            userId: userId,
-          },
-        }
-      );
-    }
 
     const updatedAuths = await Auths.findOne({
       where: {
@@ -132,12 +169,6 @@ const deleteUser = async (req, res, next) => {
         id: req.params.id,
       },
     });
-
-    await Auths.destroy({
-      where : {
-        userId : req.params.id
-      }
-    })
 
     res.status(200).json({
       status: "Success",
