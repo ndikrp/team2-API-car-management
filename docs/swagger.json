@@ -325,6 +325,144 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Car not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Cars"],
+        "summary": "Update car data",
+        "operationId": "updateCar",
+        "description": "Update car data based on the car ID \n\n Allowed roles: Admin, Manager",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Car ID"
+          }
+        ],
+        "requestBody": {
+          "description": "Required fields [name, rentPrice, image]",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Update car success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, bearer token invalid or auth level belom manager",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Cars"],
+        "summary": "Delete car data",
+        "operationId": "deleteCar",
+        "description": "Delete car data base on the car ID \n\n Allowed roles: Admin",
+        "parameter": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Car ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Delete car data successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, bearer token invalid or auth level belom admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
           }
         }
       }
@@ -389,6 +527,23 @@
             "type": "string",
             "format": "token",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJtZW1iZXJAbWVtYmVyLmNvbSIsImNyZWF0ZWRBdCI6IjIwMjItMTAtMThUMDY6MzA6NTguOTg3WiIsInVwZGF0ZWRBdCI6IjIwMjItMTAtMThUMDY6MzA6NTguOTg3WiIsImlhdCI6MTY2NjA4MzEyOH0.k_SEHG41C-4cX4ruRRLOaLZqDZBNpTmMtYgGGw0XqAA"
+          }
+        }
+      },
+      "CarRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Sample Car"
+          },
+          "rentPrice": {
+            "type": "integer",
+            "example": 50000
+          },
+          "image": {
+            "type": "string",
+            "example": "https://example.com/sample-car.png"
           }
         }
       },
