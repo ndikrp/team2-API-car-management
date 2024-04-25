@@ -137,6 +137,19 @@
           }
         }
       }
+    },
+    "/cars": {
+      "get": {
+        "tags": ["Cars"],
+        "summary": "Get all cars created by user",
+        "operationId": "getAllCars",
+        "description": "This request return list of car data created by the user \n\n Allowed roles: Admin, Manager, Staff",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {

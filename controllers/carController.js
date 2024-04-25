@@ -67,13 +67,12 @@ const findCars = async (req, res, next) => {
     const pageNum = parseInt(page)  || 1;
     const pageSize = parseInt(limit)  || 100;
     const offset = (pageNum - 1) * pageSize;
-    let whereCondition = condition;
+    let whereCondition = {};
 
     if (req.user.role === "Admin") {
       whereCondition;
     } else {
       whereCondition = {
-        ...condition,
         rentalId: req.user.rentalId,
       };
     }
@@ -81,6 +80,7 @@ const findCars = async (req, res, next) => {
     const totalCount = await Car.count({ where: whereCondition });
 
     const car = await Car.findAll({
+      where: whereCondition,
       include: [
         {
           model: Rental,
