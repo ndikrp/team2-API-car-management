@@ -1,0 +1,404 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Team Task 2 - Binar Academy",
+    "version": "1.0.0",
+    "description": "API with CRUD Operation and Auth function. This API is made to fulfill the task from kak Imam.",
+    "contact": {
+      "name": "Team Task 2",
+      "email": "teamtask@gmail.com",
+      "url": "https://jayajayajaya.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/ndikrp/team2-API-car-management/blob/main/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Auths",
+      "description": "API pada resources auth"
+    },
+    {
+      "name": "Cars",
+      "description": "API pada resources car"
+    },
+    {
+      "name": "Rentals",
+      "description": "API pada resources rental"
+    },
+    {
+      "name": "Details",
+      "description": "API pada resources detail"
+    },
+    {
+      "name": "Users",
+      "description": "API pada resources user"
+    }
+  ],
+  "servers": [
+    {
+      "description": "Car Management API",
+      "url": "http://localhost:8000/api/v1"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/rentals": {
+      "get": {
+        "tags": ["Rentals"],
+        "security": [
+          {
+            "bearerAuth ": []
+          }
+        ],
+        "summary": "Melihat semua data yang ada di resource rental",
+        "description": "Melihat semua data yang ada di resource rental",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "totalData": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "rentals": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "city": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "example": [
+                            {
+                              "id": 1,
+                              "name": "Rental Rafli",
+                              "city": "Makassar",
+                              "createdAt": "2024-04-19T13:24:52.028Z",
+                              "updatedAt": "2024-04-19T13:24:52.028Z"
+                            },
+                            {
+                              "id": 2,
+                              "name": "Rental Rendi",
+                              "city": "Makassar",
+                              "createdAt": "2024-04-19T13:24:52.028Z",
+                              "updatedAt": "2024-04-19T13:24:52.028Z"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access / No Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "JWT Malformed (Token tidak valid / tidak sesuai dengan format JWT)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rental/{id}": {
+      "get": {
+        "tags": ["Rentals"],
+        "security": [
+          {
+            "bearerAuth ": []
+          }
+        ],
+        "summary": "Melihat data rental berdasarkan id pada resource rental",
+        "description": "Melihat data rental berdasarkan id pada resource rental",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "rental": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 2
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Rental Rendi"
+                            },
+                            "city": {
+                              "type": "string",
+                              "example": "Makassar"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access / No Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "JWT Malformed (Token tidak valid / tidak sesuai dengan format JWT)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Rentals"],
+        "security": [
+          {
+            "bearerAuth ": []
+          }
+        ],
+        "summary": "Mengupdate data rental berdasarkan id",
+        "description": "Mengupdate data rental berdasarkan id",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nama rental"
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "Kota rental"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            },
+            "description": "rental id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "updatedRental": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 2
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Rafli Rental"
+                            },
+                            "city": {
+                              "type": "string",
+                              "example": "Makassar"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Akses anda tidak diterima. Role yang memiliki akses : Admin atau Manager"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No Request Body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Silahkan input data yang mau diubah"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
