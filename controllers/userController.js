@@ -1,15 +1,43 @@
-const { User } = require("../models");
+const { User, Auths } = require("../models");
 const imagekit = require("../lib/imagekit");
 const ApiError = require("../utils/apiError");
+const bcrypt = require("bcrypt");
+const { Op } = require("sequelize");
 
 const findUsers = async (req, res, next) => {
   try {
-    const users = await User.findAll();
+    const { name, role, page, limit } = req.query;
+    const condition = {};
+
+    if (name) condition.name = { [Op.iLike]: `%${name}` };
+
+    if (role) condition.role = { [Op.iLike]: `%${role}` };
+
+    const pageNum = parseInt(page) || 1;
+    const pageSize = parseInt(limit) || 10;
+    const offset = (pageNum - 1) * pageSize;
+
+    let whereCondition = condition;
+    const totalCount = await User.count({ where: whereCondition });
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    const users = await User.findAll({
+      where: whereCondition,
+      order: [["id", "ASC"]],
+      limit: pageSize,
+      offset: offset,
+    });
 
     res.status(200).json({
       status: "Success",
       data: {
         users,
+        pagination: {
+          totalData: totalCount,
+          totalPages,
+          pageNum,
+          pageSize,
+        },
       },
     });
   } catch (err) {
@@ -38,14 +66,30 @@ const findUserById = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-  const { name, age, address, role } = req.body;
+  const { name, age, address, password, confirmPassword } = req.body;
+  let userId;
 
   try {
-    const userId = req.params.id;
-    const user = await User.findByPk(userId);
+    if (req.params.id) {
+      userId = req.params.id;
+      const user = await User.findByPk(req.params.id);
+      if (!user) {
+        throw new ApiError(`Cannot find user with id : ${userId}`, 404);
+      }
+    } else {
+      userId = req.user.id;
+    }
 
-    if (!user) {
-      throw new ApiError(`Cannot find user with id : ${userId}`, 404);
+    let image;
+    if (req.file) {
+      const split = req.file.originalname.split(".");
+      const extension = split[split.length - 1];
+      const uploadedImg = await imagekit.upload({
+        file: req.file.buffer,
+        fileName: `IMG-${Date.now()}.${extension}`,
+      });
+
+      image = uploadedImg.url;
     }
 
     await User.update(
@@ -53,18 +97,58 @@ const updateUser = async (req, res, next) => {
         name,
         age,
         address,
-        role,
+        image,
       },
       {
         where: {
-          id: req.params.id,
+          id: userId,
         },
       }
     );
 
+    const updatedUser = await User.findByPk(userId);
+
+    let hashedPassword;
+    if (password) {
+      if (password.length < 8) {
+        throw new ApiError(
+          "Password needs to be atleast 8 characters long",
+          400
+        );
+      }
+
+      if (password !== confirmPassword) {
+        throw new ApiError("Password didn't match", 400);
+      }
+
+      const saltRounds = 10;
+      hashedPassword = bcrypt.hashSync(password, saltRounds);
+    }
+
+    await Auths.update(
+      {
+        password: hashedPassword,
+      },
+      {
+        where: {
+          userId: userId,
+        },
+      }
+    );
+
+    const updatedAuths = await Auths.findOne({
+      where: {
+        userId: userId,
+      },
+    });
+
     res.status(200).json({
       status: "Success",
       message: "User update successfully",
+      data: {
+        user: updatedUser,
+        auths: updatedAuths,
+      },
     });
   } catch (err) {
     next(new ApiError(err.message, 400));

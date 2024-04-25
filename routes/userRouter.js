@@ -6,14 +6,15 @@ const upload = require("../middlewares/uploader");
 const autentikasi = require("../middlewares/authenticate");
 const checkRole = require("../middlewares/checkRole");
 
-router.get("/", autentikasi, User.findUsers);
-router.get(
-  "/:id",
+router.get("/", autentikasi, checkRole(["Admin", "Manager"]), User.findUsers);
+router.get("/:id", autentikasi, User.findUserById);
+router.patch(
+  "/edit/:id",
   autentikasi,
   checkRole(["Admin", "Manager"]),
-  User.findUserById
+  upload.single("image"),
+  User.updateUser
 );
-router.patch("/edit/:id", autentikasi, checkRole(["Admin"]), User.updateUser);
 router.delete(
   "/delete/:id",
   autentikasi,
