@@ -17,23 +17,23 @@
   "tags": [
     {
       "name": "Auths",
-      "description": "API pada resources auth"
+      "description": "API for auth resources"
     },
     {
       "name": "Cars",
-      "description": "API pada resources car"
+      "description": "API for car resources"
     },
     {
       "name": "Rentals",
-      "description": "API pada resources rental"
+      "description": "API for rental resources"
     },
     {
       "name": "Details",
-      "description": "API pada resources detail"
+      "description": "API for detail resources"
     },
     {
       "name": "Users",
-      "description": "API pada resources user"
+      "description": "API for user resources"
     }
   ],
   "servers": [
@@ -169,8 +169,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Melihat semua data yang ada di resource rental",
-        "description": "Melihat semua data yang ada di resource rental",
+        "summary": "View all rental data",
+        "description": "View all rental data",
         "responses": {
           "200": {
             "description": "Success Response",
@@ -257,7 +257,7 @@
             }
           },
           "400": {
-            "description": "JWT Malformed (Token tidak valid / tidak sesuai dengan format JWT)",
+            "description": "JWT Malformed",
             "content": {
               "application/json": {
                 "schema": {
@@ -275,11 +275,149 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Rental data is empty, please add data first"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Rentals"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create new rental",
+        "description": "Create new rental",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Rental name"
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "Rental city"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "newRental": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 3
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Rental Los Santos"
+                            },
+                            "city": {
+                              "type": "string",
+                              "example": "Los Santos"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access not granted!. Required role : Admin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please fill the data"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/rental/{id}": {
+    "/rentals/{id}": {
       "get": {
         "tags": ["Rentals"],
         "security": [
@@ -287,8 +425,20 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Melihat data rental berdasarkan id pada resource rental",
-        "description": "Melihat data rental berdasarkan id pada resource rental",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            },
+            "description": "rental id"
+          }
+        ],
+        "summary": "View rental data by id",
+        "description": "View rental data by id",
         "responses": {
           "200": {
             "description": "Success Response",
@@ -357,7 +507,7 @@
             }
           },
           "400": {
-            "description": "JWT Malformed (Token tidak valid / tidak sesuai dengan format JWT)",
+            "description": "JWT Malformed",
             "content": {
               "application/json": {
                 "schema": {
@@ -375,6 +525,26 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There's no rental with this id"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -385,22 +555,22 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Mengupdate data rental berdasarkan id",
-        "description": "Mengupdate data rental berdasarkan id",
+        "summary": "Update rental by id",
+        "description": "Update rental by id",
         "requestBody": {
           "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "Nama rental"
+                    "description": "Rental name"
                   },
                   "city": {
                     "type": "string",
-                    "description": "Kota rental"
+                    "description": "Rental city"
                   }
                 }
               }
@@ -479,7 +649,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Akses anda tidak diterima. Role yang memiliki akses : Admin atau Manager"
+                      "example": "Access not granted!. Required role : Admin or Manager"
                     }
                   }
                 }
@@ -499,9 +669,487 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Silahkan input data yang mau diubah"
+                      "example": "Please input your data!"
                     }
                   }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There's no rental with this id"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Rentals"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete rental by id",
+        "description": "Delete rental by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            },
+            "description": "rental id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Rental deleted successfully :("
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access / No Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access not granted!. Required role : Admin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "JWT Malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There's no rental with this id"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars": {
+      "get": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all cars created by user",
+        "operationId": "getAllCars",
+        "description": "This request return list of car data created by the user \n\n Allowed roles: Admin, Manager, Staff",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Get all cars success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CarResponse"
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "example": 3
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create new car data",
+        "operationId": "createCar",
+        "description": "Create and insert new car data to database \n\n Allowed roles: Admin, Manager",
+        "requestBody": {
+          "description": "Required fields [name, rentPrice, rentalId, image]",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "rentPrice", "rentalId", "image"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Sample Car"
+                  },
+                  "rentPrice": {
+                    "type": "integer",
+                    "example": 50000
+                  },
+                  "rentalId": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Create car success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CarResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/{id}": {
+      "get": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get car data by id",
+        "operationId": "getCarById",
+        "description": "Get car data based on the car ID \n\n Allowed roles: Admin, Manager, Staff",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Car ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Get car success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CarResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Car not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update car data",
+        "operationId": "updateCar",
+        "description": "Update car data based on the car ID \n\n Allowed roles: Admin, Manager",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Car ID"
+          }
+        ],
+        "requestBody": {
+          "description": "Required fields [name, rentPrice, image]",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Update car success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, bearer token invalid or auth level belom manager",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete car data",
+        "operationId": "deleteCar",
+        "description": "Delete car data base on the car ID \n\n Allowed roles: Admin",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Car ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Delete car data successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, bearer token invalid or auth level belom admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
                 }
               }
             }
