@@ -49,6 +49,115 @@
         "scheme": "bearer",
         "bearerFormat": "JWT"
       }
+    },
+    "schemas": {
+      "UnauthorizedMsg": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "failed"
+          },
+          "message": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "failed"
+          },
+          "message": {
+            "type": "string",
+            "example": "Missing required fields"
+          }
+        }
+      },
+      "LoginCred": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 4
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "new@account.com"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["Admin", "Manager", "Staff"]
+          },
+          "token": {
+            "type": "string",
+            "format": "token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJtZW1iZXJAbWVtYmVyLmNvbSIsImNyZWF0ZWRBdCI6IjIwMjItMTAtMThUMDY6MzA6NTguOTg3WiIsInVwZGF0ZWRBdCI6IjIwMjItMTAtMThUMDY6MzA6NTguOTg3WiIsImlhdCI6MTY2NjA4MzEyOH0.k_SEHG41C-4cX4ruRRLOaLZqDZBNpTmMtYgGGw0XqAA"
+          }
+        }
+      },
+      "CarRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Sample Car"
+          },
+          "rentPrice": {
+            "type": "integer",
+            "example": 50000
+          },
+          "image": {
+            "type": "string",
+            "example": "https://example.com/sample-car.png"
+          }
+        }
+      },
+      "CarResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 4
+          },
+          "name": {
+            "type": "string",
+            "example": "Sample Car"
+          },
+          "userId": {
+            "type": "integer",
+            "example": 1
+          },
+          "rentPrice": {
+            "type": "integer",
+            "example": 50000
+          },
+          "rentalId": {
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 1
+              },
+              "name": {
+                "type": "string",
+                "example": "Rental 1"
+              }
+            },
+            "image": {
+              "type": "string",
+              "example": "https://example.com/sample-car.png"
+            }
+          }
+        }
+      }
     }
   },
   "paths": {
@@ -57,7 +166,7 @@
         "tags": ["Rentals"],
         "security": [
           {
-            "bearerAuth ": []
+            "bearerAuth": []
           }
         ],
         "summary": "Melihat semua data yang ada di resource rental",
@@ -175,7 +284,7 @@
         "tags": ["Rentals"],
         "security": [
           {
-            "bearerAuth ": []
+            "bearerAuth": []
           }
         ],
         "summary": "Melihat data rental berdasarkan id pada resource rental",
@@ -273,7 +382,7 @@
         "tags": ["Rentals"],
         "security": [
           {
-            "bearerAuth ": []
+            "bearerAuth": []
           }
         ],
         "summary": "Mengupdate data rental berdasarkan id",
@@ -393,6 +502,360 @@
                       "example": "Silahkan input data yang mau diubah"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars": {
+      "get": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all cars created by user",
+        "operationId": "getAllCars",
+        "description": "This request return list of car data created by the user \n\n Allowed roles: Admin, Manager, Staff",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Get all cars success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CarResponse"
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "example": 3
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create new car data",
+        "operationId": "createCar",
+        "description": "Create and insert new car data to database \n\n Allowed roles: Admin, Manager",
+        "requestBody": {
+          "description": "Required fields [name, rentPrice, rentalId, image]",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "rentPrice", "rentalId", "image"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Sample Car"
+                  },
+                  "rentPrice": {
+                    "type": "integer",
+                    "example": 50000
+                  },
+                  "rentalId": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Create car success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CarResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/{id}": {
+      "get": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get car data by id",
+        "operationId": "getCarById",
+        "description": "Get car data based on the car ID \n\n Allowed roles: Admin, Manager, Staff",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Car ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Get car success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CarResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Car not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update car data",
+        "operationId": "updateCar",
+        "description": "Update car data based on the car ID \n\n Allowed roles: Admin, Manager",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Car ID"
+          }
+        ],
+        "requestBody": {
+          "description": "Required fields [name, rentPrice, image]",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Update car success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, bearer token invalid or auth level belom manager",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete car data",
+        "operationId": "deleteCar",
+        "description": "Delete car data base on the car ID \n\n Allowed roles: Admin",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Car ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Delete car data successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, bearer token invalid or auth level belom admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
                 }
               }
             }
