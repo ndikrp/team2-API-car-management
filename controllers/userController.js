@@ -140,6 +140,7 @@ const updateUser = async (req, res, next) => {
       where: {
         userId: userId,
       },
+      attributes: ["id", "password"],
     });
 
     res.status(200).json({
