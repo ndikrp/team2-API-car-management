@@ -20,10 +20,7 @@ const getRentals = async (req, res, next) => {
 
     if (rentals.length < 1) {
       return next(
-        new ApiError(
-          "Data rental masih kosong, silahkan isi data terlebih dahulu",
-          404
-        )
+        new ApiError("Rental data is empty, please add data first", 404)
       );
     }
 
@@ -50,7 +47,7 @@ const getRentalById = async (req, res, next) => {
     });
 
     if (!rental) {
-      return next(new ApiError("Rental tidak ada!", 404));
+      return next(new ApiError("There's no rental with this id", 404));
     }
 
     res.status(200).json({
@@ -68,8 +65,10 @@ const createRental = async (req, res, next) => {
   try {
     const { name, city } = req.body;
 
+    console.log(req.body);
+
     if (!name || !city) {
-      return next(new ApiError("Lengkapi data terlebih dahulu!", 400));
+      return next(new ApiError("Please fill the data", 400));
     }
 
     const newRental = await Rental.create({
@@ -100,12 +99,12 @@ const deleteRental = async (req, res, next) => {
     });
 
     if (deletedRental === 0) {
-      return next(new ApiError("Rental tidak ada...", 404));
+      return next(new ApiError("There's no rental with this id", 404));
     }
 
     res.status(200).json({
       status: "success",
-      message: "Rental berhasil dihapus :(",
+      message: "Rental deleted successfully :(",
     });
   } catch (error) {
     next(new ApiError(err.message), 500);
@@ -117,6 +116,12 @@ const updateRental = async (req, res, next) => {
     const { name, city } = req.body;
     const { id } = req.params;
 
+    const reqBody = req.body;
+
+    if (Object.keys(reqBody).length === 0) {
+      return next(new ApiError("Please input your data!", 400));
+    }
+
     const updatedRows = {};
     if (name) {
       updatedRows.name = name;
@@ -125,11 +130,15 @@ const updateRental = async (req, res, next) => {
       updatedRows.city = city;
     }
 
-    await Rental.update(updatedRows, {
+    const updateRental = await Rental.update(updatedRows, {
       where: {
         id,
       },
     });
+
+    if (updateRental[0] === 0) {
+      return next(new ApiError("There's no rental with this id", 404));
+    }
 
     const updatedRental = await Rental.findOne({
       where: {

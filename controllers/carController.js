@@ -29,7 +29,9 @@ const createCar = async (req, res, next) => {
     let rentalId;
     if (req.user.role === "Admin") {
       if (!req.body.rentalId) {
-        return next(new ApiError("The 'rentalId' field is required to create a car. Please provide the 'rentalId' in the request body.", 400));
+        if (!req.body.rentalId) {
+          return next(new ApiError("The 'rentalId' field is required to create a car. Please provide the 'rentalId' in the request body.", 400));
+        }
       }
       rentalId = req.body.rentalId;
     } else {
@@ -60,27 +62,17 @@ const createCar = async (req, res, next) => {
 
 const findCars = async (req, res, next) => {
   try {
-    const { productName, username, shop, page, limit } = req.query;
-    const condition = {};
-    if (productName) condition.name = { [Op.iLike]: `%${productName}%` };
+    const { page, limit } = req.query;
 
-    const includeShopCondition = {};
-    if (shop) includeShopCondition.name = { [Op.iLike]: `%${shop}%` };
-
-    const includeUserCondition = {};
-    if (username) includeUserCondition.name = { [Op.iLike]: `${username}%` };
-
-    const pageNum = parseInt(page) || 1;
-    const pageSize = parseInt(limit) || 100;
+    const pageNum = parseInt(page)  || 1;
+    const pageSize = parseInt(limit)  || 100;
     const offset = (pageNum - 1) * pageSize;
-
-    let whereCondition = condition;
+    let whereCondition = {};
 
     if (req.user.role === "Admin") {
       whereCondition;
     } else {
       whereCondition = {
-        ...condition,
         rentalId: req.user.rentalId,
       };
     }
@@ -88,10 +80,10 @@ const findCars = async (req, res, next) => {
     const totalCount = await Car.count({ where: whereCondition });
 
     const car = await Car.findAll({
+      where: whereCondition,
       include: [
         {
           model: Rental,
-          where: includeShopCondition,
           attributes: ["id", "name"],
         },
         {
@@ -99,7 +91,6 @@ const findCars = async (req, res, next) => {
           attributes: ["name"],
         },
       ],
-      where: whereCondition,
       order: [["id", "ASC"]],
       attributes: ["name", "rentPrice", "userId", "createdAt", "updatedAt"],
       limit: pageSize,
@@ -138,7 +129,7 @@ const findCarById = async (req, res, next) => {
     }
 
     if (car.rentalId !== req.user.rentalId) {
-      return next(new ApiError("Your shop is not owner of this car", 401));
+      return next(new ApiError("Your rental is not owner of this car", 401));
     }
 
     res.status(200).json({
@@ -155,7 +146,13 @@ const findCarById = async (req, res, next) => {
 const UpdateCar = async (req, res, next) => {
   const { name, rentPrice } = req.body;
   try {
-    const car = await Car.update(
+    const oldCar = await Car.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    const [updatedCount, updatedCars] = await Car.update(
       {
         name,
         rentPrice,
@@ -164,13 +161,22 @@ const UpdateCar = async (req, res, next) => {
         where: {
           id: req.params.id,
         },
+        returning: true, 
       }
     );
 
+    if (updatedCount === 0) {
+      return res.status(404).json({
+        status: "Error",
+        message: "Car not found",
+      });
+    }
+
     res.status(200).json({
       status: "Success",
-      message: "Succesfuly update car",
-      updatedCar: car,
+      message: "Successfully updated car",
+      updatedCar: updatedCars[0], 
+      previousCar: oldCar,
     });
   } catch (err) {
     next(new ApiError(err.message, 400));

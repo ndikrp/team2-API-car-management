@@ -18,11 +18,18 @@ module.exports = (sequelize, DataTypes) => {
   }
   Details.init(
     {
+      description:{
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      productionYear: DataTypes.INTEGER,
+      carType: DataTypes.STRING,
+      size: DataTypes.STRING,
       imageUrl: DataTypes.ARRAY(DataTypes.STRING),
       carId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-      },
+      }
     },
     {
       sequelize,

@@ -12,7 +12,7 @@ const checkRole = (roles) => {
         }
         next(
           new ApiError(
-            `Akses anda tidak diterima. Role yang memiliki akses : ${allowedRoles}`,
+            `Access not granted. Required role : ${allowedRoles}`,
             401
           )
         );
