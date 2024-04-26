@@ -1493,6 +1493,554 @@
           }
         }
       }
+    },
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all users data",
+        "description": "View all users data \n\n Allowed roles: Admin, Manager",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "age": {
+                                "type": "number"
+                              },
+                              "adress": {
+                                "type": "string"
+                              },
+                              "image": {
+                                "type": "string"
+                              },
+                              "role": {
+                                "type": "string"
+                              },
+                              "rentalId": {
+                                "type": "number"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "example": [
+                            {
+                              "id": 1,
+                              "name": "Hafiedz",
+                              "age": 20,
+                              "address": "Indonesia",
+                              "image": "gambar1.png",
+                              "role": "Admin",
+                              "rentalId": null,
+                              "createdAt": "2024-04-26T00:18:36.880Z",
+                              "updatedAt": "2024-04-26T00:18:36.880Z"
+                            },
+                            {
+                              "id": 2,
+                              "name": "Rafli",
+                              "age": 20,
+                              "address": "Indonesia",
+                              "image": "gambar1.png",
+                              "role": "Manager",
+                              "rentalId": 1,
+                              "createdAt": "2024-04-26T00:18:36.880Z",
+                              "updatedAt": "2024-04-26T00:18:36.880Z"
+                            },
+                            {
+                              "id": 3,
+                              "name": "Andhika",
+                              "age": 20,
+                              "address": "Indonesia",
+                              "image": "gambar1.png",
+                              "role": "Admin",
+                              "rentalId": null,
+                              "createdAt": "2024-04-26T00:18:36.880Z",
+                              "updatedAt": "2024-04-26T00:18:36.880Z"
+                            },
+                            {
+                              "id": 4,
+                              "name": "Rendi",
+                              "age": 20,
+                              "address": "Indonesia",
+                              "image": "gambar1.png",
+                              "role": "Manager",
+                              "rentalId": 2,
+                              "createdAt": "2024-04-26T00:18:36.880Z",
+                              "updatedAt": "2024-04-26T00:18:36.880Z"
+                            },
+                            {
+                              "id": 5,
+                              "name": "Gita",
+                              "age": 20,
+                              "address": "Indonesia",
+                              "image": "gambar1.png",
+                              "role": "Staff",
+                              "rentalId": 1,
+                              "createdAt": "2024-04-26T00:18:36.880Z",
+                              "updatedAt": "2024-04-26T00:18:36.880Z"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access / No Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "JWT Malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "View user data by id",
+        "operationId": "getUserById",
+        "description": "Get user data based on id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 5
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Gita"
+                            },
+                            "age": {
+                              "type": "number",
+                              "example": 20
+                            },
+                            "address": {
+                              "type": "string",
+                              "example": "Indonesia"
+                            },
+                            "image": {
+                              "type": "string",
+                              "example": "gambar1.png"
+                            },
+                            "role": {
+                              "type": "string",
+                              "example": "Staff"
+                            },
+                            "rentalId": {
+                              "type": "number",
+                              "example": 1
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-04-26T00:18:36.880Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-04-26T00:18:36.880Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedMsg"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Cannot find user with id : {id}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update user data",
+        "description": "Update user data based on id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            },
+            "description": "user id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User name"
+                  },
+                  "age": {
+                    "type": "number",
+                    "description": "User age"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "User address"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User new password"
+                  },
+                  "confirmPassword": {
+                    "type": "string",
+                    "description": "User confirm password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User update successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 5
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Indah"
+                            },
+                            "address": {
+                              "type": "string",
+                              "example": "Manado"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-04-26T00:18:36.880Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-04-26T02:01:01.244Z"
+                            }
+                          }
+                        },
+                        "auth": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 5
+                            },
+                            "password": {
+                              "type": "string",
+                              "example": "$2b$10$8o9ujzX2dJrRY2g4Z2yqhu3i5yzu7.6mgicylMirZIzUwA4LD3KPC"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access not granted!. Required role : Admin or Manager"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Cannot find user with id : {id}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete user data",
+        "operationId": "deleteUser",
+        "description": "Delete user data based on id \n\n Allowed roles: Admin",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access / No Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access not granted!. Required role : Admin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "JWT Malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User with id : ${userId} doesn't exist"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
