@@ -161,6 +161,343 @@
     }
   },
   "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Auths"],
+        "summary": "Return the results from hit API login user",
+        "description": " API for login user",
+        "requestBody": {
+          "description": "request body for succes login user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "hafiedz@mail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "admin"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success User login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Berhasil login"
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYWRobGFuIiwicm9sZSI6IlN1cGVyYWRtaW4iLCJlbWFpbCI6ImZhZGhsYW5AZ21haWwuY29tIiwiaWF0IjoxNjk3OTM5ODMwfQ.hBED_9F3gLAwACOv7uOIeHR_6yKwQBwkf8WIVuEVQzs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "wrong password or user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "wrong password or user not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Email format error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid email format"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["Auths"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Return the results from hit API register user",
+        "description": " API for register user",
+        "requestBody": {
+          "description": " request body for success register user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "rend"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "rend@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "rend123"
+                  },
+                  "confirmPassword": {
+                    "type": "string",
+                    "example": "rend123"
+                  },
+                  "age": {
+                    "type": "integer",
+                    "example": 20
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "Nusantara"
+                  },
+                  "role": {
+                    "type": "string",
+                    "example": "Manager"
+                  },
+                  "rentalId": {
+                    "type": "integer",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success register",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "dataValues": {
+                          "id": 72,
+                          "name": "rend",
+                          "address": "Nusantara",
+                          "age": 20,
+                          "rentalId": 2,
+                          "role": "Manager",
+                          "updatedAt": "2024-04-25T09:41:53.042Z",
+                          "createdAt": "2024-04-25T09:41:53.042Z",
+                          "image": null
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No Access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Staff is not allowed to register new users"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email already taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User email already taken"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": ["Auths"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Return the results from hit API checktoken user",
+        "description": " API for checktoken user",
+        "responses": {
+          "200": {
+            "description": "Succes checktoken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "user": {
+                          "id": 1,
+                          "name": "Hafiedz",
+                          "age": 20,
+                          "address": "Indonesia",
+                          "image": "gambar1.png",
+                          "role": "Admin",
+                          "rentalId": null,
+                          "createdAt": "2024-04-18T13:24:53.050Z",
+                          "updatedAt": "2024-04-18T13:24:53.050Z",
+                          "Auth": {
+                            "id": 1,
+                            "email": "hafiedz@mail.com",
+                            "password": "$2a$12$52jmU1ASdJaCPNaZyCPIKOaiQV/3Ms7A41qv7lgZ2PMc2gCuOdWbe",
+                            "userId": 1,
+                            "createdAt": "2024-04-18T13:24:53.076Z",
+                            "updatedAt": "2024-04-18T13:24:53.076Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token Expired"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/rentals": {
       "get": {
         "tags": ["Rentals"],
