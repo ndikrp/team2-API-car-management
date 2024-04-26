@@ -12,6 +12,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      description: {
+        type: Sequelize.TEXT,
+      },
+      productionYear: {
+        type: Sequelize.INTEGER,
+      },
+      carType: {
+        type: Sequelize.STRING,
+      },
+      size: {
+        type: Sequelize.STRING,
+      },
       imageUrl: {
         type: Sequelize.ARRAY(Sequelize.STRING),
       },
