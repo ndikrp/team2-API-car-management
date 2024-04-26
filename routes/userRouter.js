@@ -9,17 +9,12 @@ const checkRole = require("../middlewares/checkRole");
 router.get("/", autentikasi, checkRole(["Admin", "Manager"]), User.findUsers);
 router.get("/:id", autentikasi, User.findUserById);
 router.patch(
-  "/edit/:id",
+  "/:id",
   autentikasi,
   checkRole(["Admin", "Manager"]),
   upload.single("image"),
   User.updateUser
 );
-router.delete(
-  "/delete/:id",
-  autentikasi,
-  checkRole(["Admin"]),
-  User.deleteUser
-);
+router.delete("/:id", autentikasi, checkRole(["Admin"]), User.deleteUser);
 
 module.exports = router;
