@@ -1510,6 +1510,750 @@
           }
         }
       }
+    },
+    "/details": {
+      "get": {
+        "tags": ["Details"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "View all car details data",
+        "description": "View all car details data",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "totalData": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "productionYear": {
+                                "type": "number"
+                              },
+                              "carType": {
+                                "type": "string"
+                              },
+                              "size": {
+                                "type": "string"
+                              },
+                              "imageUrl": {
+                                "type": "array"
+                              },
+                              "carId": {
+                                "type": "number"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "example": [
+                            {
+                              "id": 1,
+                              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget purus in turpis mattis tristique.",
+                              "productionYear": 2011,
+                              "carType": "Suv",
+                              "size": "Medium",
+                              "imageUrl": ["gambar1.png", "gambar2.png", "gambar3.png"],
+                              "carId": 1,
+                              "createdAt": "2024-04-25T18:31:47.633Z",
+                              "updatedAt": "2024-04-25T18:31:47.633Z",
+                              "Car": {
+                                "id": 1,
+                                "name": "Honda"
+                              }
+                            },
+                            {
+                              "id": 2,
+                              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget purus in turpis mattis tristique.",
+                              "productionYear": 2010,
+                              "carType": "Sedan",
+                              "size": "Small",
+                              "imageUrl": ["gambar1.png", "gambar2.png", "gambar3.png"],
+                              "carId": 2,
+                              "createdAt": "2024-04-25T18:31:47.633Z",
+                              "updatedAt": "2024-04-25T18:31:47.633Z",
+                              "Car": {
+                                "id": 2,
+                                "name": "Innova"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access / No Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "JWT Malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Rental data is empty, please add data first"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Details"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create new car details",
+        "description": "Create new car details",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget purus in turpis mattis tristique."
+                  },
+                  "productionYear": {
+                    "type": "number",
+                    "example": 2002
+                  },
+                  "carType": {
+                    "type": "string",
+                    "example": "Sedan"
+                  },
+                  "size": {
+                    "type": "string",
+                    "example": "Small"
+                  },
+                  "imageUrl": {
+                    "type": "array",
+                    "example": ["gambar1.png", "gambar2.png", "gambar3.png"]
+                  },
+                  "carId": {
+                    "type": "number",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "newDetailsl": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 3
+                            },
+                            "description": {
+                              "type": "string",
+                              "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget purus in turpis mattis tristique."
+                            },
+                            "productionYear": {
+                              "type": "number",
+                              "example": 2002
+                            },
+                            "carType": {
+                              "type": "string",
+                              "example": "Sedan"
+                            },
+                            "size": {
+                              "type": "string",
+                              "example": "Small"
+                            },
+                            "imageUrl": {
+                              "type": "array",
+                              "example": ["gambar1.png", "gambar2.png", "gambar3.png"]
+                            },
+                            "carId": {
+                              "type": "number",
+                              "example": 2
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access not granted!. Required role : Admin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please fill the data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "details/{id}": {
+      "get": {
+        "tags": ["Details"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 3
+            },
+            "description": "details id"
+          }
+        ],
+        "summary": "View rental data by id",
+        "description": "View rental data by id",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "rental": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 3
+                            },
+                            "description": {
+                              "type": "string",
+                              "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget purus in turpis mattis tristique."
+                            },
+                            "productionYear": {
+                              "type": "number",
+                              "example": 2002
+                            },
+                            "carType": {
+                              "type": "string",
+                              "example": "Sedan"
+                            },
+                            "size": {
+                              "type": "string",
+                              "example": "Small"
+                            },
+                            "imageUrl": {
+                              "type": "array",
+                              "example": ["gambar1.png", "gambar2.png", "gambar3.png"]
+                            },
+                            "carId": {
+                              "type": "number",
+                              "example": 2
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access / No Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Token not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "JWT Malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There's no car details with this id"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Details"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update details by id",
+        "description": "Update details by id",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string"
+                  },
+                  "productionYear": {
+                    "type": "number"
+                  },
+                  "carType": {
+                    "type": "string"
+                  },
+                  "size": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "type": "array"
+                  },
+                  "carId": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 3
+            },
+            "description": "rental id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "updatedRental": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 3
+                            },
+                            "description": {
+                              "type": "string",
+                              "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget purus in turpis mattis tristique."
+                            },
+                            "productionYear": {
+                              "type": "number",
+                              "example": 2002
+                            },
+                            "carType": {
+                              "type": "string",
+                              "example": "Sedan"
+                            },
+                            "size": {
+                              "type": "string",
+                              "example": "Small"
+                            },
+                            "imageUrl": {
+                              "type": "array",
+                              "example": ["gambar1.png", "gambar2.png", "gambar3.png"]
+                            },
+                            "carId": {
+                              "type": "number",
+                              "example": 2
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "example": "2024-04-19T13:24:52.028Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access not granted!. Required role : Admin or Manager"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No Request Body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please input your data!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There's no car deatils with this id"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Details"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete details by id",
+        "description": "Delete details by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            },
+            "description": "details id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Car Details deleted successfully :("
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No Access / No Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access not granted!. Required role : Admin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "JWT Malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There's no car details with this id"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
