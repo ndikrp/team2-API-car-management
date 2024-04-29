@@ -178,7 +178,7 @@ const deleteDetails = async (req, res, next) => {
 
     res.status(200).json({
       status: "Success",
-      message: "Success delete details",
+      message: "Details Deleted Successfully",
     });
   } catch (err) {
     next(new ApiError(err.message, 400));
